@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Secret World of AI</title>
+<style>
+:root{
+  --ink:#2b2d42; --bg:#fff8e7; --page:#ffffff;
+  --pink:#ff6b9d; --blue:#4cc9f0; --yellow:#ffd23f; --green:#6bd38a; --purple:#9b5de5; --orange:#ff9f1c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#ffe8b0;color:var(--ink);font-family:"Chalkboard SE","Comic Sans MS","Marker Felt","Trebuchet MS",sans-serif;font-size:18px;line-height:1.55}
+.page{max-width:820px;margin:24px auto;background:var(--page);border:6px solid var(--ink);border-radius:28px;padding:36px 40px;box-shadow:8px 8px 0 rgba(43,45,66,.25);page-break-after:always;break-after:page}
+h1,h2,h3{line-height:1.15;margin:.2em 0 .4em}
+h1{font-size:2.6rem}
+h2{font-size:2rem;color:var(--purple)}
+h3{font-size:1.3rem;color:var(--pink)}
+.chnum{display:inline-block;background:var(--yellow);border:4px solid var(--ink);border-radius:999px;padding:2px 18px;font-size:1rem;font-weight:bold;transform:rotate(-3deg)}
+.fig{text-align:center;margin:14px 0}
+.fig svg{max-width:100%;height:auto}
+.cap{font-size:.85rem;opacity:.7;margin-top:4px}
+.bubble{background:#e8f9ff;border:4px solid var(--blue);border-radius:22px;padding:12px 18px;margin:14px 0;position:relative}
+.bubble.b{margin-left:70px}
+.bubble.b::before{content:"";position:absolute;left:-26px;top:20px;border:12px solid transparent;border-right:16px solid var(--blue)}
+.fun{background:#fff3c4;border:4px dashed var(--orange);border-radius:18px;padding:12px 18px;margin:16px 0}
+.word{background:var(--yellow);padding:0 8px;border-radius:8px;font-weight:bold}
+.ex{background:#f3eaff;border:5px solid var(--purple);border-radius:24px;padding:16px 22px;margin:22px 0}
+.ex h3{color:var(--purple);margin-top:0}
+.ex .tag{display:inline-block;background:var(--purple);color:#fff;border-radius:999px;padding:0 14px;font-size:.85rem;margin-right:6px}
+.blank{display:inline-block;min-width:120px;border-bottom:3px solid var(--ink)}
+.box{border:3px dashed var(--ink);border-radius:14px;min-height:110px;padding:6px 10px;background:#fff;margin:8px 0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.match{display:grid;grid-template-columns:1fr 60px 1fr;gap:8px 0;align-items:center}
+.match .l,.match .r{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px 12px}
+.match .dot{text-align:center;font-size:1.4rem}
+table{border-collapse:collapse;width:100%;background:#fff}
+th,td{border:3px solid var(--ink);padding:6px 10px;text-align:left}
+th{background:var(--yellow)}
+ul.check{list-style:none;padding-left:0}
+ul.check li::before{content:"☐ ";font-size:1.2em}
+ol li,ul li{margin:4px 0}
+.cover{text-align:center;background:linear-gradient(160deg,#c9f0ff,#fff3c4 60%,#ffd6e8)}
+.cover h1{font-size:3.2rem;color:var(--purple);text-shadow:3px 3px 0 var(--yellow)}
+.cover p.sub{font-size:1.3rem}
+.cert{text-align:center;border-style:double;border-width:14px;background:#fffdf0}
+.small{font-size:.9rem}
+.answer li{margin:2px 0}
+.toolbar{max-width:820px;margin:16px auto 0;text-align:right;padding:0 8px}
+.toolbar button{font:inherit;background:var(--green);border:4px solid var(--ink);border-radius:999px;padding:6px 20px;cursor:pointer}
+@media (max-width:640px){
+  .page{margin:12px 8px;padding:22px 18px;border-width:4px}
+  .cols{grid-template-columns:1fr}
+  h1{font-size:2rem}.cover h1{font-size:2.3rem}
+  .bubble.b{margin-left:0}.bubble.b::before{display:none}
+}
+@media print{
+  body{background:#fff;font-size:15px}
+  .toolbar{display:none}
+  .page{box-shadow:none;margin:0;border-radius:0;max-width:none;border-width:4px;padding:22px 26px}
+}
+</style>
+</head>
+<body>
+
+<!-- Reusable art -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="robot" viewBox="0 0 200 240">
+      <line x1="100" y1="12" x2="100" y2="40" stroke="#2b2d42" stroke-width="6"/>
+      <circle cx="100" cy="12" r="10" fill="#ff6b9d" stroke="#2b2d42" stroke-width="4"/>
+      <rect x="40" y="40" width="120" height="90" rx="26" fill="#4cc9f0" stroke="#2b2d42" stroke-width="6"/>
+      <circle cx="75" cy="82" r="16" fill="#fff" stroke="#2b2d42" stroke-width="4"/>
+      <circle cx="125" cy="82" r="16" fill="#fff" stroke="#2b2d42" stroke-width="4"/>
+      <circle cx="78" cy="84" r="7" fill="#2b2d42"/><circle cx="128" cy="84" r="7" fill="#2b2d42"/>
+      <path d="M72 108 Q100 128 128 108" fill="none" stroke="#2b2d42" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="52" cy="104" r="7" fill="#ff6b9d" opacity=".7"/><circle cx="148" cy="104" r="7" fill="#ff6b9d" opacity=".7"/>
+      <rect x="55" y="138" width="90" height="70" rx="18" fill="#ffd23f" stroke="#2b2d42" stroke-width="6"/>
+      <circle cx="100" cy="172" r="14" fill="#ff6b9d" stroke="#2b2d42" stroke-width="4"/>
+      <path d="M55 150 L22 176" stroke="#2b2d42" stroke-width="10" stroke-linecap="round"/>
+      <path d="M145 150 L178 120" stroke="#2b2d42" stroke-width="10" stroke-linecap="round"/>
+      <rect x="68" y="208" width="24" height="24" rx="8" fill="#9b5de5" stroke="#2b2d42" stroke-width="4"/>
+      <rect x="108" y="208" width="24" height="24" rx="8" fill="#9b5de5" stroke="#2b2d42" stroke-width="4"/>
+    </symbol>
+    <symbol id="cat" viewBox="0 0 100 100">
+      <path d="M20 40 L26 10 L44 28 Q50 26 56 28 L74 10 L80 40 Q88 60 70 80 Q50 92 30 80 Q12 60 20 40Z" fill="#ff9f1c" stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="39" cy="50" r="5" fill="#2b2d42"/><circle cx="61" cy="50" r="5" fill="#2b2d42"/>
+      <path d="M46 60 L50 64 L54 60Z" fill="#ff6b9d"/>
+      <path d="M50 64 Q44 72 38 68 M50 64 Q56 72 62 68" fill="none" stroke="#2b2d42" stroke-width="3"/>
+      <path d="M30 60 L10 56 M30 66 L10 70 M70 60 L90 56 M70 66 L90 70" stroke="#2b2d42" stroke-width="3"/>
+    </symbol>
+    <symbol id="dog" viewBox="0 0 100 100">
+      <path d="M24 30 Q6 30 10 64 Q22 62 28 46Z" fill="#8d5524" stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M76 30 Q94 30 90 64 Q78 62 72 46Z" fill="#8d5524" stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"/>
+      <ellipse cx="50" cy="52" rx="28" ry="32" fill="#e0ac69" stroke="#2b2d42" stroke-width="4"/>
+      <circle cx="39" cy="46" r="5" fill="#2b2d42"/><circle cx="61" cy="46" r="5" fill="#2b2d42"/>
+      <ellipse cx="50" cy="62" rx="11" ry="8" fill="#2b2d42"/>
+      <path d="M50 70 Q50 82 42 80 M50 70 Q50 82 58 80" fill="none" stroke="#2b2d42" stroke-width="3"/>
+      <path d="M44 78 Q50 92 56 78Z" fill="#ff6b9d"/>
+    </symbol>
+    <symbol id="star" viewBox="0 0 50 50"><path d="M25 3 L31 19 L48 19 L34 29 L40 46 L25 36 L10 46 L16 29 L2 19 L19 19Z" fill="#ffd23f" stroke="#2b2d42" stroke-width="3" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="toolbar"><button onclick="window.print()">🖨️ Print my book</button></div>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <div class="fig"><svg viewBox="0 0 520 330" width="520" role="img" aria-label="Beep-Boop the robot waving, with stars and a cat and a dog">
+    <circle cx="260" cy="170" r="150" fill="#fff" opacity=".6"/>
+    <use href="#star" x="40" y="30" width="60" height="60"/><use href="#star" x="430" y="20" width="50" height="50"/><use href="#star" x="460" y="200" width="44" height="44"/>
+    <use href="#robot" x="150" y="20" width="220" height="290"/>
+    <use href="#cat" x="20" y="200" width="120" height="120"/>
+    <use href="#dog" x="380" y="210" width="120" height="120"/>
+  </svg></div>
+  <h1>The Secret World of AI</h1>
+  <p class="sub">How smart machines think, learn, and create!</p>
+  <p>🎨 Stories • 🧩 Puzzles • 🎲 Screen-free games • 🕵️ Detective missions</p>
+  <p class="small">A picture-and-activity book for kids, parents, and teachers.<br>Grab a pencil and some crayons. You'll need them!</p>
+</section>
+
+<!-- ============ HOW TO USE ============ -->
+<section class="page">
+  <h2>👋 Hi! I'm Beep-Boop!</h2>
+  <div class="fig"><svg viewBox="0 0 400 260" width="360"><use href="#robot" x="110" y="10" width="170" height="230"/><use href="#star" x="40" y="40" width="50" height="50"/><use href="#star" x="310" y="70" width="40" height="40"/></svg></div>
+  <div class="bubble"><b>Beep-Boop says:</b> "I'm a friendly robot guide. I'll show you how AI really works. It isn't magic, and it's way more fun than magic, because <i>you can learn how it's done!</i>"</div>
+  <h3>How to use this book</h3>
+  <p>Every chapter has a story, a picture, and an <span class="tag" style="background:var(--purple);color:#fff;border-radius:999px;padding:0 12px">✏️ Your Turn</span> activity box. Answers are at the back, but try first, because trying is how brains (and machines!) learn.</p>
+  <ul class="check">
+    <li>Find a pencil and crayons</li>
+    <li>Read one chapter at a time</li>
+    <li>Do the ✏️ Your Turn boxes</li>
+    <li>Play the Screen-Free Games with a friend or grown-up</li>
+    <li>Earn your AI Explorer Certificate at the end!</li>
+  </ul>
+</section>
+
+<!-- ============ WELCOME / WHAT IS AI ============ -->
+<section class="page">
+  <span class="chnum">Welcome</span>
+  <h2>What is AI, Really?</h2>
+  <p>Have you ever wondered how a tablet knows your face, how a voice helper answers your silly questions, or how a video app guesses what you want to watch next?</p>
+  <p>It feels like magic, but it's <b>Artificial Intelligence</b>, or <span class="word">AI</span> for short.</p>
+  <div class="fun">
+    <b>AI in plain English:</b> AI is technology that uses information to make smart choices, spot hidden patterns, or answer questions. It's like a clever digital helper.<br><br>
+    ✅ AI is a <b>tool made by people</b> using math, code, and smart rules.<br>
+    ❌ AI is <b>not</b> a person. It has no feelings or memories like you do, and it is not an all-knowing brain.
+  </div>
+  <h3>AI you already meet every day</h3>
+  <div class="fig"><svg viewBox="0 0 640 150" width="640" role="img" aria-label="Five icons: speaker, play button, camera with puppy ears, map, game controller">
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+      <!-- speaker -->
+      <rect x="30" y="30" width="70" height="80" rx="20" fill="#4cc9f0"/><circle cx="65" cy="60" r="8" fill="#fff"/><circle cx="65" cy="88" r="14" fill="#fff"/>
+      <path d="M110 55 q14 15 0 30" fill="none"/><path d="M122 45 q22 25 0 50" fill="none"/>
+      <!-- play -->
+      <rect x="165" y="35" width="100" height="70" rx="14" fill="#ff6b9d"/><path d="M200 50 L200 90 L236 70Z" fill="#fff"/>
+      <!-- camera w/ ears -->
+      <rect x="315" y="50" width="90" height="62" rx="14" fill="#ffd23f"/><circle cx="360" cy="82" r="20" fill="#fff"/><circle cx="360" cy="82" r="9" fill="#2b2d42"/>
+      <path d="M322 50 L326 22 L346 50" fill="#8d5524"/><path d="M398 50 L394 22 L374 50" fill="#8d5524"/>
+      <!-- map -->
+      <path d="M455 40 L490 30 L525 42 L525 112 L490 100 L455 110Z" fill="#6bd38a"/><path d="M490 30 L490 100" /><path d="M470 85 q12 -30 40 -30" fill="none" stroke="#ff6b9d" stroke-dasharray="6 6"/>
+      <!-- controller -->
+      <rect x="545" y="52" width="85" height="52" rx="24" fill="#9b5de5"/><path d="M565 66 v22 M554 77 h22" stroke="#fff"/><circle cx="604" cy="72" r="5" fill="#fff"/><circle cx="615" cy="84" r="5" fill="#fff"/>
+    </g>
+    <g font-size="14" text-anchor="middle" fill="#2b2d42" font-family="inherit">
+      <text x="75" y="140">Voice helper</text><text x="215" y="140">Video picks</text><text x="360" y="140">Camera filters</text><text x="490" y="140">Maps</text><text x="588" y="140">Game bots</text>
+    </g></svg></div>
+  <ul>
+    <li>🗣️ <b>Voice assistants</b> listen to your question and answer it.</li>
+    <li>🎬 <b>Video and music apps</b> notice what you like and suggest more.</li>
+    <li>📸 <b>Camera filters</b> spot your face and add silly puppy ears.</li>
+    <li>🚗 <b>Map apps</b> find the fastest way around traffic jams.</li>
+    <li>🎮 <b>Game bots</b> change their moves to keep the game fun.</li>
+  </ul>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> AI Spotter: Is it AI?</h3>
+    <p>Write <b>AI</b> or <b>NOT AI</b> next to each one. Hint: AI uses information to make choices.</p>
+    <ol>
+      <li>A phone that suggests the next word as you type: <span class="blank"></span></li>
+      <li>A wooden spoon: <span class="blank"></span></li>
+      <li>A map app that reroutes around a traffic jam: <span class="blank"></span></li>
+      <li>A light switch that only turns on when you flip it: <span class="blank"></span></li>
+      <li>A streaming app that picks your next show: <span class="blank"></span></li>
+    </ol>
+    <p><b>Bonus:</b> Draw one AI helper you've used this week in the box.</p>
+    <div class="box"></div>
+  </div>
+</section>
+
+<!-- ============ CH 1 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 1</span>
+  <h2>The Magic Recipe: Algorithms 🍪</h2>
+  <p>A computer can't be smart until it has instructions. A set of step-by-step instructions is called an <span class="word">algorithm</span>.</p>
+  <div class="fig"><svg viewBox="0 0 640 190" width="640" role="img" aria-label="Five cookie steps: ingredients, mix, scoop, bake, eat">
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+      <!-- 1 ingredients -->
+      <rect x="22" y="60" width="56" height="70" rx="8" fill="#fff"/><rect x="22" y="48" width="56" height="16" rx="6" fill="#ff6b9d"/><text x="50" y="104" font-size="15" text-anchor="middle" stroke="none" fill="#2b2d42">flour</text>
+      <circle cx="104" cy="118" r="12" fill="#4a2c0f"/><circle cx="124" cy="124" r="10" fill="#4a2c0f"/>
+      <!-- 2 bowl -->
+      <path d="M170 80 q0 55 50 55 q50 0 50 -55Z" fill="#4cc9f0"/><path d="M200 70 q20 -26 40 0" fill="none"/><path d="M215 56 l12 -22" />
+      <!-- 3 tray -->
+      <rect x="320" y="115" width="130" height="14" rx="6" fill="#bbb"/><circle cx="350" cy="100" r="16" fill="#e0ac69"/><circle cx="400" cy="100" r="16" fill="#e0ac69"/><circle cx="350" cy="97" r="3" fill="#4a2c0f"/><circle cx="404" cy="103" r="3" fill="#4a2c0f"/>
+      <!-- 4 oven -->
+      <rect x="470" y="50" width="80" height="85" rx="10" fill="#ff9f1c"/><rect x="482" y="80" width="56" height="42" rx="6" fill="#ffd23f"/><circle cx="486" cy="65" r="5" fill="#fff"/><circle cx="502" cy="65" r="5" fill="#fff"/>
+      <!-- 5 happy cookie -->
+      <circle cx="600" cy="95" r="30" fill="#e0ac69"/><circle cx="590" cy="88" r="4" fill="#2b2d42" stroke="none"/><circle cx="610" cy="88" r="4" fill="#2b2d42" stroke="none"/><path d="M588 104 q12 12 24 0" fill="none"/>
+    </g>
+    <g font-size="22" font-weight="bold" fill="#9b5de5" text-anchor="middle"><text x="50" y="30">1</text><text x="220" y="30">2</text><text x="385" y="30">3</text><text x="510" y="30">4</text><text x="600" y="40">5</text></g>
+    <g font-size="13" text-anchor="middle" fill="#2b2d42"><text x="64" y="165">gather</text><text x="220" y="165">mix</text><text x="385" y="165">spoon</text><text x="510" y="165">bake</text><text x="600" y="165">enjoy!</text></g>
+  </svg><div class="cap">The Cookie Algorithm</div></div>
+
+  <div class="bubble b"><b>Beep-Boop:</b> "Skip step 2, or bake for 10 <i>hours</i> instead of 10 <i>minutes</i>, and you get cookie charcoal! Computers need the steps exactly right, in exactly the right order."</div>
+
+  <div class="fun">⌛ <b>History flashback!</b> Over 1,000 years ago, a brilliant mathematician named <b>al-Khwarizmi</b> (the "Father of Algebra") wrote down the first step-by-step rules like these. The word <i>algorithm</i> comes from his name!</div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Put the steps in order</h3>
+    <p>These toothbrushing steps got scrambled! Number them 1 to 5.</p>
+    <ul>
+      <li>___ Rinse your mouth with water</li>
+      <li>___ Squeeze toothpaste onto the brush</li>
+      <li>___ Pick up your toothbrush</li>
+      <li>___ Brush every tooth for two minutes</li>
+      <li>___ Put the brush away</li>
+    </ul>
+    <h3>🐛 Debug the robot!</h3>
+    <p>A robot follows this sandwich algorithm <i>exactly</i>: "1. Put peanut butter on bread. 2. Put bread on plate." <b>What goes wrong? Write a better algorithm.</b></p>
+    <div class="box" style="min-height:140px"></div>
+  </div>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 2</span>
+  <h2>The Giant Ball Pit: Big Data 🎈</h2>
+  <p>To make good choices, computers need information. We call information <span class="word">data</span>: numbers, words, pictures, clicks, and sounds.</p>
+  <p>Put <i>millions and billions</i> of pieces of data together and you get <span class="word">Big Data</span>.</p>
+  <div class="fig"><svg viewBox="0 0 640 230" width="640" role="img" aria-label="A small bucket of 5 balls beside a huge ball pit">
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round">
+      <path d="M40 90 L60 170 L140 170 L160 90Z" fill="#4cc9f0"/>
+      <circle cx="75" cy="85" r="16" fill="#ff6b9d"/><circle cx="105" cy="80" r="16" fill="#ffd23f"/><circle cx="135" cy="86" r="16" fill="#6bd38a"/><circle cx="90" cy="62" r="16" fill="#9b5de5"/><circle cx="122" cy="62" r="16" fill="#ff9f1c"/>
+      <rect x="230" y="110" width="390" height="100" rx="20" fill="#9b5de5"/>
+    </g>
+    <g stroke="#2b2d42" stroke-width="3">
+      <!-- ball pit balls -->
+      <g id="row"><circle cx="255" cy="105" r="14" fill="#ff6b9d"/><circle cx="285" cy="100" r="14" fill="#ffd23f"/><circle cx="315" cy="106" r="14" fill="#4cc9f0"/><circle cx="345" cy="100" r="14" fill="#6bd38a"/><circle cx="375" cy="105" r="14" fill="#ff9f1c"/><circle cx="405" cy="100" r="14" fill="#ff6b9d"/><circle cx="435" cy="106" r="14" fill="#ffd23f"/><circle cx="465" cy="100" r="14" fill="#4cc9f0"/><circle cx="495" cy="105" r="14" fill="#6bd38a"/><circle cx="525" cy="100" r="14" fill="#ff9f1c"/><circle cx="555" cy="106" r="14" fill="#ff6b9d"/><circle cx="585" cy="100" r="14" fill="#ffd23f"/></g>
+      <use href="#row" y="-24"/><use href="#row" y="-46"/>
+    </g>
+    <g font-size="16" text-anchor="middle" fill="#2b2d42"><text x="100" y="205">5 balls = easy!</text><text x="425" y="196" fill="#fff" font-size="18">1,000,000 balls = Big Data!</text></g>
+  </svg></div>
+  <p>Sorting 5 balls is easy. Sorting a million would take you <i>years</i>. There is so much information on the internet that people can't organize it alone. AI helps by sorting through the giant ball pit in seconds, finding patterns and helpful answers.</p>
+
+  <h3>The 3 Vs of Big Data</h3>
+  <table>
+    <tr><th>V</th><th>Means</th><th>Think of…</th></tr>
+    <tr><td><b>Volume</b></td><td>How <i>much</i> data (Terabytes, Petabytes)</td><td>🌊 An ocean of balls</td></tr>
+    <tr><td><b>Velocity</b></td><td>How <i>fast</i> it arrives</td><td>🚀 Balls zooming in every second</td></tr>
+    <tr><td><b>Variety</b></td><td>How many <i>types</i> (text, songs, photos, videos…)</td><td>🌈 Every color and shape</td></tr>
+  </table>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Be the sorter!</h3>
+    <div class="fig"><svg viewBox="0 0 360 120" width="360">
+      <g stroke="#2b2d42" stroke-width="3">
+        <circle cx="30" cy="30" r="16" fill="#ff6b9d"/><circle cx="75" cy="55" r="16" fill="#4cc9f0"/><circle cx="120" cy="28" r="16" fill="#ffd23f"/><circle cx="165" cy="60" r="16" fill="#ff6b9d"/><circle cx="210" cy="30" r="16" fill="#6bd38a"/><circle cx="255" cy="58" r="16" fill="#4cc9f0"/><circle cx="300" cy="30" r="16" fill="#ff6b9d"/><circle cx="335" cy="70" r="16" fill="#ffd23f"/>
+        <circle cx="50" cy="95" r="16" fill="#ff6b9d"/><circle cx="100" cy="98" r="16" fill="#ffd23f"/><circle cx="150" cy="100" r="14" fill="#4cc9f0"/><circle cx="205" cy="95" r="16" fill="#ff6b9d"/><circle cx="260" cy="100" r="14" fill="#6bd38a"/><circle cx="300" cy="104" r="12" fill="#ffd23f"/>
+      </g></svg></div>
+    <p>Count the balls by color: 🩷 Pink: ____ &nbsp; 🩵 Blue: ____ &nbsp; 💛 Yellow: ____ &nbsp; 💚 Green: ____</p>
+    <p>How long did it take you? ____ seconds. Now imagine a million balls. Why is a computer helper handy?</p>
+    <div class="box" style="min-height:60px"></div>
+    <p><b>Match the V:</b> Draw a line from each example to its V.</p>
+    <div class="match">
+      <div class="l">A million videos on a server</div><div class="dot">⟷</div><div class="r">Velocity</div>
+      <div class="l">Photos + songs + texts + maps</div><div class="dot">⟷</div><div class="r">Volume</div>
+      <div class="l">Thousands of clicks every second</div><div class="dot">⟷</div><div class="r">Variety</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 3</span>
+  <h2>How Machines Learn 🐱🐶</h2>
+  <p>Old-style programs follow rules that people write. But <span class="word">Machine Learning</span> (ML) is different: the computer learns from <b>examples</b>, and nobody has to write every rule.</p>
+  <div class="fig"><svg viewBox="0 0 640 260" width="640" role="img" aria-label="A sorting machine with a cat going into the cat bin and a dog going into the dog bin">
+    <use href="#cat" x="20" y="10" width="90" height="90"/><use href="#dog" x="130" y="30" width="90" height="90"/>
+    <g stroke="#2b2d42" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="250" y="50" width="150" height="110" rx="20" fill="#ffd23f"/>
+      <circle cx="290" cy="95" r="13" fill="#fff"/><circle cx="360" cy="95" r="13" fill="#fff"/><circle cx="292" cy="97" r="5" fill="#2b2d42"/><circle cx="362" cy="97" r="5" fill="#2b2d42"/>
+      <path d="M300 130 q25 14 50 0" fill="none"/>
+      <path d="M225 80 L250 95" fill="none"/>
+      <path d="M300 160 L270 195 M350 160 L380 195" fill="none"/>
+      <rect x="215" y="195" width="110" height="55" rx="10" fill="#ff9f1c"/><rect x="325" y="195" width="110" height="55" rx="10" fill="#4cc9f0"/>
+    </g>
+    <use href="#cat" x="245" y="195" width="55" height="55"/><use href="#dog" x="355" y="195" width="55" height="55"/>
+    <g font-size="14" text-anchor="middle" fill="#2b2d42"><text x="325" y="35">Learning Machine</text><text x="270" y="192">CATS</text><text x="380" y="192">DOGS</text></g>
+    <g font-size="16" fill="#9b5de5"><text x="470" y="90">1. Show examples</text><text x="470" y="120">2. Find patterns</text><text x="470" y="150">3. Guess new ones!</text></g>
+  </svg></div>
+
+  <h3>Teaching a computer is like teaching a little sibling</h3>
+  <p>You don't hand a toddler a 100-page rulebook about ears and fur. You point at pictures: <i>"Cat… cat… puppy… cat!"</i> After lots of examples, their brain figures it out. Machines do the same!</p>
+  <table>
+    <tr><th>Word</th><th>What it means</th><th>Cat example</th></tr>
+    <tr><td><b>Training data</b></td><td>The examples we show the computer</td><td>1,000 labeled pet photos</td></tr>
+    <tr><td><b>Model</b></td><td>The pattern-finding "brain" it builds</td><td>"Pointy ears + whiskers = cat"</td></tr>
+    <tr><td><b>Prediction</b></td><td>Its best guess on something new</td><td>"That new photo is a cat!"</td></tr>
+  </table>
+
+  <h3>3 ways machines learn</h3>
+  <div class="cols">
+    <div class="fun"><b>👩‍🏫 Supervised</b><br>Learning <i>with a teacher</i>. Every example has the right answer attached.<br><small>Spam filter: "Spam" or "Not Spam"</small></div>
+    <div class="fun" style="background:#e8fff0;border-color:var(--green)"><b>🗺️ Unsupervised</b><br>Exploring <i>without a map</i>. No labels, so the computer finds groups on its own.<br><small>Sorting toy blocks by shape</small></div>
+  </div>
+  <div class="fun" style="background:#ffe8f1;border-color:var(--pink)"><b>🎮 Reinforcement</b>: learning by <i>trial and error</i>. Good moves earn rewards, bad moves lose points.<br><small>A robot learning to walk, or AI learning chess</small></div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Train your own machine</h3>
+    <p>You are the machine! Here are the <b>training examples</b>. Look for the pattern.</p>
+    <div class="cols">
+      <div><b>🍎 Group A:</b> apple, strawberry, cherry (all red)</div>
+      <div><b>🍌 Group B:</b> banana, lemon, corn (all yellow)</div>
+    </div>
+    <p>Now <b>predict</b>: Which group do these go in? <i>Tomato</i> ___ &nbsp; <i>Sunflower</i> ___ &nbsp; <i>Blueberry</i> ___ (Tricky! What would a machine need?)</p>
+    <p><b>Match the learning type:</b></p>
+    <div class="match">
+      <div class="l">Sorting buttons with no labels</div><div class="dot">⟷</div><div class="r">Supervised</div>
+      <div class="l">Email labeled "spam" by people</div><div class="dot">⟷</div><div class="r">Reinforcement</div>
+      <div class="l">A game bot earns points for winning</div><div class="dot">⟷</div><div class="r">Unsupervised</div>
+    </div>
+    <p><b>Draw it:</b> Make 3 training pictures to teach a machine what a <i>smiley face</i> is.</p>
+    <div class="box"></div>
+  </div>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 4</span>
+  <h2>The Helper Robot Team: Neural Networks 🤖</h2>
+  <p>How does a computer recognize a face or understand your voice? It uses an <span class="word">Artificial Neural Network</span>.</p>
+  <p>Picture a <b>team of tiny helper robots standing in layers like a stack of pancakes</b>. Is the picture a cat or a dog? The team works it out together:</p>
+  <div class="fig"><svg viewBox="0 0 660 340" width="660" role="img" aria-label="Three layers of helper robots: lookers, thinkers, deciders">
+    <g stroke="#2b2d42" stroke-width="2" opacity=".35">
+      <path d="M130 70 L330 60 M130 70 L330 170 M130 70 L330 280 M130 140 L330 60 M130 140 L330 170 M130 140 L330 280 M130 210 L330 60 M130 210 L330 170 M130 210 L330 280 M130 280 L330 60 M130 280 L330 170 M130 280 L330 280"/>
+      <path d="M330 60 L530 110 M330 60 L530 230 M330 170 L530 110 M330 170 L530 230 M330 280 L530 110 M330 280 L530 230"/>
+    </g>
+    <g stroke="#2b2d42" stroke-width="4">
+      <circle cx="130" cy="70" r="26" fill="#4cc9f0"/><circle cx="130" cy="140" r="26" fill="#4cc9f0"/><circle cx="130" cy="210" r="26" fill="#4cc9f0"/><circle cx="130" cy="280" r="26" fill="#4cc9f0"/>
+      <circle cx="330" cy="60" r="28" fill="#ffd23f"/><circle cx="330" cy="170" r="28" fill="#ffd23f"/><circle cx="330" cy="280" r="28" fill="#ffd23f"/>
+      <circle cx="530" cy="110" r="32" fill="#ff6b9d"/><circle cx="530" cy="230" r="32" fill="#ff6b9d"/>
+    </g>
+    <g font-size="22" text-anchor="middle"><text x="130" y="77">👂</text><text x="130" y="147">👃</text><text x="130" y="217">〰️</text><text x="130" y="287">🐾</text><text x="330" y="68">🧠</text><text x="330" y="178">🧠</text><text x="330" y="288">🧠</text><text x="530" y="118">🐱</text><text x="530" y="238">🐶</text></g>
+    <g font-size="15" text-anchor="middle" fill="#2b2d42" font-weight="bold"><text x="130" y="28">Layer 1: Lookers</text><text x="330" y="22">Layer 2: Thinkers</text><text x="530" y="45">Layer 3: Deciders</text></g>
+    <g font-size="14" text-anchor="middle" fill="#9b5de5"><text x="530" y="160">90% sure!</text><text x="530" y="285">10%</text></g>
+  </svg></div>
+  <ol>
+    <li><b>👁️ Lookers (input layer):</b> each one checks a tiny piece: ears, nose, whiskers, tail.</li>
+    <li><b>🧠 Thinkers (hidden layers):</b> combine the clues. "Pointy ears <i>and</i> whiskers <i>and</i> a fluffy tail?"</li>
+    <li><b>🗳️ Deciders (output layer):</b> vote! "90% cat, 10% dog." The strongest vote wins.</li>
+  </ol>
+  <div class="fun">🛠️ <b>Fixing mistakes:</b> If the team says "dog" for a cat photo, a learning boss says "Oops!" The helpers turn their <b>dials and switches</b> (called <span class="word">weights</span>) so pointy ears and whiskers count <i>more</i> for "cat" next time. The more practice, the smarter the team!</div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Be the Deciders!</h3>
+    <p>Mystery animal clues: <b>pointy ears, whiskers, says "meow", fluffy tail.</b></p>
+    <p>Give a vote of 0–10 for each animal: 🐱 Cat: ___ &nbsp; 🐶 Dog: ___ &nbsp; 🐟 Fish: ___</p>
+    <p>New clues arrive: <b>barks, wags tail, loves fetch.</b> Votes now: 🐱 ___ &nbsp; 🐶 ___ &nbsp; 🐟 ___</p>
+    <p>Which clue was the most helpful? Why do you think the network gives it a bigger "weight"?</p>
+    <div class="box" style="min-height:70px"></div>
+    <p><b>Draw it:</b> Add a 4th looker to the network. What clue would it check?</p>
+  </div>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 5</span>
+  <h2>The Digital Artist: Generative AI 🎨</h2>
+  <div class="fig"><svg viewBox="0 0 520 260" width="500" role="img" aria-label="A robot painting a rainbow dragon on an easel">
+    <g stroke="#2b2d42" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M300 240 L330 70 M440 240 L410 70 M370 240 L370 60" fill="none"/>
+      <rect x="285" y="50" width="170" height="120" rx="8" fill="#fff"/>
+      <path d="M310 140 q30 -70 70 -40 q40 20 50 -20" fill="none" stroke="#9b5de5" stroke-width="12"/>
+      <path d="M310 150 q30 -70 70 -40 q40 20 50 -20" fill="none" stroke="#ff6b9d" stroke-width="8"/>
+      <circle cx="435" cy="82" r="12" fill="#6bd38a"/>
+    </g>
+    <use href="#robot" x="30" y="10" width="190" height="245"/>
+    <ellipse cx="42" cy="200" rx="28" ry="18" fill="#ffd23f" stroke="#2b2d42" stroke-width="4"/>
+    <circle cx="30" cy="196" r="4" fill="#ff6b9d"/><circle cx="44" cy="204" r="4" fill="#4cc9f0"/><circle cx="54" cy="194" r="4" fill="#6bd38a"/>
+  </svg></div>
+  <p>You may have heard of chatbots and AI picture-makers. They are <span class="word">Generative AI</span>, a super-tool that <b>creates</b> things.</p>
+  <div class="cols">
+    <div class="fun" style="background:#e8f9ff;border-color:var(--blue)"><b>🔍 Discriminative AI: the Inspector</b><br>Looks at something that exists and sorts it: "That's a picture of a dragon."</div>
+    <div class="fun" style="background:#ffe8f1;border-color:var(--pink)"><b>🎨 Generative AI: the Artist</b><br>Makes something brand-new: a story, poem, song, or picture that never existed before!</div>
+  </div>
+  <h3>Large Language Models (LLMs) 📚</h3>
+  <p>A chatbot runs on a <span class="word">Large Language Model</span>. It has read billions of pages of text. When you ask something, it predicts the most likely <i>next words</i>, like the world's smartest auto-complete on a phone.</p>
+  <div class="fun">🧩 <b>Try it:</b> "Twinkle, twinkle, little ____" You just did what an LLM does: you predicted the next word from patterns you've seen before!</div>
+
+  <h3>Become a Prompt Engineer 🚀</h3>
+  <p>The instruction you give an AI is a <span class="word">prompt</span>. Better prompts get better results. Learning to write them is called <b>prompt engineering</b>: your secret password!</p>
+  <div class="cols">
+    <div class="fun" style="background:#fff0f0;border-color:#e63946">❌ <b>Lazy prompt</b><br>"Write a story about a dragon."</div>
+    <div class="fun" style="background:#effff3;border-color:var(--green)">✅ <b>Super prompt</b><br>"Write a funny 3-paragraph story for 8-year-olds about a friendly purple dragon named Barnaby who loves baking cupcakes but is afraid of mice!"</div>
+  </div>
+  <p class="small">A super prompt says <b>WHO</b> (a purple dragon), <b>WHAT</b> (bakes cupcakes), <b>HOW</b> (funny, 3 paragraphs), and <b>FOR WHOM</b> (8-year-olds).</p>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Prompt makeover!</h3>
+    <p>Upgrade each lazy prompt. Add who, what, how, and for whom.</p>
+    <p>1. Lazy: "Draw a cat."<br>Super: <span class="blank" style="min-width:90%"></span></p>
+    <p>2. Lazy: "Tell me about space."<br>Super: <span class="blank" style="min-width:90%"></span></p>
+    <p>3. <b>Your own:</b> What would you ask an AI artist to make? Write your best prompt, then draw what you imagine.</p>
+    <div class="box"></div>
+  </div>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 6</span>
+  <h2>Robots in Action 🤖🏫</h2>
+  <p>AI doesn't only live on screens. It also lives inside <b>robots</b>! Kids all over the world learn to code by giving robots commands.</p>
+  <table>
+    <tr><th>Age</th><th>Robots you might meet</th><th>How you code them</th></tr>
+    <tr><td>3–7</td><td>Bee-Bot, Botley, Cubetto</td><td>Press buttons or place tiles. No screen!</td></tr>
+    <tr><td>8–11</td><td>Dash, Sphero BOLT, mBot Neo</td><td>Drag-and-drop blocks (Scratch)</td></tr>
+    <tr><td>12+</td><td>Arduino, Raspberry Pi robots</td><td>Typing code (Python, C++)</td></tr>
+  </table>
+  <div class="fun">🏫 <b>Classroom friends:</b> Social robots like <b>Jibo</b> have visited classrooms to help kids practice reading and storytelling. Kids ask great questions like <i>"How does it see me?"</i> and <i>"Can it do a handstand?"</i> That's how scientists get started!</div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Rescue the star!</h3>
+    <p>Program the robot to reach the ⭐. It can't step on 🪨 rocks. It starts facing <b>up</b>. Commands: <b>Forward ▲</b> (one square), <b>Turn Left ↶</b>, <b>Turn Right ↷</b>.</p>
+    <div class="fig"><svg viewBox="0 0 260 260" width="260" role="img" aria-label="4 by 4 grid; robot bottom-left, star top-right, rocks at two squares">
+      <g stroke="#2b2d42" stroke-width="4" fill="#fff"><rect x="10" y="10" width="240" height="240" rx="6"/></g>
+      <g stroke="#2b2d42" stroke-width="3"><path d="M70 10 V250 M130 10 V250 M190 10 V250 M10 70 H250 M10 130 H250 M10 190 H250"/></g>
+      <text x="40" y="115" font-size="40" text-anchor="middle">🪨</text>
+      <text x="100" y="175" font-size="40" text-anchor="middle">🪨</text>
+      <use href="#star" x="196" y="16" width="48" height="48"/>
+      <use href="#robot" x="22" y="196" width="46" height="54"/>
+      <text x="40" y="182" font-size="18" text-anchor="middle">▲</text>
+    </svg></div>
+    <p>My program: <span class="blank" style="min-width:90%"></span></p>
+    <p><b>Loop challenge 🔁:</b> Your program uses "Forward" three times in a row more than once. Write it again using a loop, like "Repeat 3 times: Forward".</p>
+    <div class="box" style="min-height:60px"></div>
+    <p><b>Bonus:</b> Draw your own 4×4 grid with obstacles for a friend to solve!</p>
+  </div>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 7</span>
+  <h2>Be a Smart AI Detective 🕵️</h2>
+  <p>AI is powerful, but it isn't perfect. Good detectives check their clues!</p>
+  <div class="fig"><svg viewBox="0 0 400 240" width="360" role="img" aria-label="Robot detective with magnifying glass">
+    <use href="#robot" x="90" y="15" width="170" height="220"/>
+    <g stroke="#2b2d42" stroke-width="6" stroke-linecap="round">
+      <path d="M90 15 q40 -26 80 0 L170 24 L90 24Z" fill="#8d5524"/><path d="M80 24 H182" />
+      <circle cx="310" cy="95" r="38" fill="#e8f9ff" opacity=".8"/><path d="M280 122 L238 165" fill="none" stroke-width="12"/>
+    </g>
+    <text x="310" y="108" font-size="34" text-anchor="middle">❓</text>
+  </svg></div>
+
+  <div class="cols">
+    <div class="fun"><b>1. 😵‍💫 Hallucinations</b><br>When an AI doesn't know, it sometimes <i>confidently makes up</i> facts that sound real! Always double-check important facts with books, teachers, or parents.</div>
+    <div class="fun"><b>2. ⚖️ Bias</b><br>If an AI only learns from incomplete or unfair data, it learns unfair patterns. If it only sees orange cats, it might think black cats aren't cats at all!</div>
+    <div class="fun"><b>3. 🎭 Deepfakes &amp; voice cloning</b><br>AI can make fake videos or copy a voice from a few seconds of audio. Seeing or hearing isn't always believing! Make a <b>Family Safe Word</b> to check a call is truly from family.</div>
+    <div class="fun"><b>4. 🔒 Privacy</b><br>Never tell a chatbot your real name, address, school, or passwords. Keep your info safe!</div>
+  </div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Detective cases</h3>
+    <p><b>Case 1: Hallucination hunt.</b> An AI says: <i>"The moon is made of cheese, and the first person to visit it was a cow named Daisy in 1802."</i> Circle the suspicious parts. How could you check?</p>
+    <div class="box" style="min-height:60px"></div>
+    <p><b>Case 2: Share or Don't Share?</b> Write ✅ (okay) or 🚫 (keep private):</p>
+    <ul>
+      <li>My favorite color is green: ___</li>
+      <li>The name of my school: ___</li>
+      <li>My home address: ___</li>
+      <li>My password: ___</li>
+      <li>"What's a good science fair idea?": ___</li>
+    </ul>
+    <p><b>Case 3: Family Safe Word.</b> With your family, pick a secret word that's easy to remember but hard to guess. <i>Don't write it here!</i> Where could a stranger NOT find it?</p>
+    <p><b>Case 4: Fix the bias.</b> A pet app only has photos of orange cats. What photos should we add so it can learn what all cats look like?</p>
+    <div class="box" style="min-height:60px"></div>
+  </div>
+</section>
+
+<!-- ============ CH 8 ============ -->
+<section class="page">
+  <span class="chnum">Chapter 8</span>
+  <h2>Screen-Free AI Games 🎲</h2>
+  <p>You don't need a computer to build a smart AI brain! Try these with family and friends.</p>
+
+  <div class="fun">
+    <h3>🥪 Game 1: The Human Algorithm</h3>
+    Pretend a grown-up is a clueless robot. Write step-by-step instructions for making a peanut butter sandwich or brushing teeth. If you forget "open the jar first," the robot might smash bread on the glass! Debug your instructions until they work.
+  </div>
+  <div class="fun" style="background:#e8f9ff;border-color:var(--blue)">
+    <h3>🕵️ Game 2: "I Spy" Neural Network</h3>
+    Play I Spy using <i>features</i>: "I spy something round, made of rubber, that bounces, used in basketball." Notice how your brain combines clues, just like the Thinkers layer!
+  </div>
+  <div class="fun" style="background:#e8fff0;border-color:var(--green)">
+    <h3>🌳 Game 3: The Decision Tree</h3>
+    Draw a branching map with chalk or paper:
+<pre style="font-family:inherit;margin:6px 0;background:#fff;border-radius:12px;padding:8px 14px;border:3px solid var(--ink)">Is it raining?
+ ├─ YES → rain boots → Is it cold? → YES: raincoat
+ └─ NO  → sneakers   → Is it sunny? → YES: sun hat</pre>
+    Now make your own tree: "What should I eat for breakfast?"
+  </div>
+  <div class="fun" style="background:#ffe8f1;border-color:var(--pink)">
+    <h3>🏁 Game 4: Robot on the Grid</h3>
+    Tape a 4×4 grid on the floor. Put toys on some squares as obstacles. Write command cards (<i>Forward 2, Turn Right, Forward 1</i>), then guide your human "robot" to the prize.
+  </div>
+  <div class="fun" style="background:#f3eaff;border-color:var(--purple)">
+    <h3>💃 Game 5: The Loop Dance</h3>
+    Invent a 3-move dance: Clap → Jump → Spin. Repeat it 4 times! In coding, repeating without rewriting is called a <b>loop</b>.
+  </div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Game log</h3>
+    <table>
+      <tr><th>Game</th><th>Played with</th><th>How fun? (⭐1–5)</th><th>What I learned</th></tr>
+      <tr><td>1</td><td></td><td></td><td></td></tr>
+      <tr><td>2</td><td></td><td></td><td></td></tr>
+      <tr><td>3</td><td></td><td></td><td></td></tr>
+      <tr><td>4</td><td></td><td></td><td></td></tr>
+      <tr><td>5</td><td></td><td></td><td></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ VOCAB + REVIEW ============ -->
+<section class="page">
+  <h2>📖 AI Word Cheat Sheet</h2>
+  <table>
+    <tr><th>Word</th><th>Kid-friendly meaning</th></tr>
+    <tr><td><b>AI</b></td><td>Smart technology that uses data to make choices, find patterns, or create things</td></tr>
+    <tr><td><b>Algorithm</b></td><td>Step-by-step instructions, like a recipe</td></tr>
+    <tr><td><b>Data</b> / <b>Big Data</b></td><td>Information / a giant ball pit of it</td></tr>
+    <tr><td><b>Machine Learning</b></td><td>Computers learning from examples</td></tr>
+    <tr><td><b>Neural Network</b></td><td>A layered team of helper robots that vote on an answer</td></tr>
+    <tr><td><b>Generative AI</b></td><td>AI that creates new stories, art, music, or code</td></tr>
+    <tr><td><b>Prompt</b></td><td>The question or instruction you give an AI</td></tr>
+    <tr><td><b>Hallucination</b></td><td>When an AI confidently makes things up</td></tr>
+    <tr><td><b>Bias</b></td><td>Unfair choices caused by incomplete or unfair data</td></tr>
+  </table>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Final quiz</h3>
+    <ol>
+      <li>A recipe of step-by-step instructions is an ____________.</li>
+      <li>Computers that learn from examples use ____________ learning.</li>
+      <li>A chatbot works by predicting the next ____________.</li>
+      <li>If an AI makes up a false fact, it is ____________.</li>
+      <li>True or False: AI has feelings like you do. ______</li>
+      <li>True or False: You should share your password with a chatbot. ______</li>
+      <li>The layers of a neural network are the Lookers, the ____________, and the Deciders.</li>
+    </ol>
+    <p><b>Word search 🔎 (hidden across or down):</b> AI · DATA · ROBOT · LOOP · BIAS</p>
+    <div class="fig"><svg viewBox="0 0 280 230" width="280" aria-label="Word search grid">
+      <g font-size="22" font-weight="bold" text-anchor="middle" fill="#2b2d42" font-family="monospace">
+        <text x="20" y="28">R O B O T Z Q</text><text x="20" y="62">X D L K W M P</text><text x="20" y="96">A A O B I A S</text><text x="20" y="130">I T O Y N E V</text><text x="20" y="164">Q A P J H U C</text><text x="20" y="198">B I A S Z T R</text>
+      </g>
+    </svg></div>
+    <p class="small">Note: letters are spaced to read across, left to right. Look carefully, as some words go <i>down</i>!</p>
+  </div>
+</section>
+
+<!-- ============ CERTIFICATE ============ -->
+<section class="page cert">
+  <h1>🏅 AI Explorer Certificate 🏅</h1>
+  <div class="fig"><svg viewBox="0 0 200 120" width="180"><use href="#robot" x="60" y="0" width="85" height="115"/><use href="#star" x="10" y="20" width="40" height="40"/><use href="#star" x="150" y="20" width="40" height="40"/></svg></div>
+  <p style="font-size:1.3rem">This certifies that</p>
+  <p><span class="blank" style="min-width:70%"></span></p>
+  <p style="font-size:1.3rem">has learned how AI works, can spot a hallucination, keeps private things private, and knows that <b>people</b> are always the real brains behind the machines!</p>
+  <p>Date: ____________ &nbsp;&nbsp; Signed by Beep-Boop 🤖</p>
+  <p>Happy learning! Keep asking questions, because curious kids invent the future. 🌟</p>
+</section>
+
+<!-- ============ ANSWER KEY ============ -->
+<section class="page">
+  <h2>🔑 Answer Key (for grown-ups and sneaky peekers)</h2>
+  <ul class="answer">
+    <li><b>Welcome, AI Spotter:</b> 1 AI · 2 NOT AI · 3 AI · 4 NOT AI · 5 AI</li>
+    <li><b>Ch.1 Toothbrush order:</b> Pick up brush (1) → Squeeze toothpaste (2) → Brush two minutes (3) → Rinse (4) → Put away (5). <b>Sandwich bug:</b> the robot never opens the jar, gets a knife, takes out the bread, or adds a second slice. Any complete, ordered fix is correct.</li>
+    <li><b>Ch.2 Ball counts:</b> Pink 5 · Blue 3 · Yellow 4 · Green 2. <b>V matches:</b> A million videos = Volume · Photos+songs+texts = Variety · Clicks every second = Velocity.</li>
+    <li><b>Ch.3:</b> Tomato → A · Sunflower → B · Blueberry → neither! The machine needs a new group or more training data. <b>Matches:</b> buttons with no labels = Unsupervised · labeled spam = Supervised · game points = Reinforcement.</li>
+    <li><b>Ch.4:</b> First clues: Cat gets the most votes (e.g. 9 vs 2 vs 0). Second clues: Dog wins. "Barks" is a very strong clue, so it gets a high weight. Any reasoned answer is great.</li>
+    <li><b>Ch.5 Prompts:</b> Look for who + what + how + for whom (e.g. "Draw a happy orange cat wearing a tiny space helmet, in bright cartoon style, for a 6-year-old's bedroom poster").</li>
+    <li><b>Ch.6 Grid:</b> Turn Right, Forward, Forward, Forward, Turn Left, Forward, Forward, Forward. <b>With loops:</b> Turn Right, Repeat 3: Forward, Turn Left, Repeat 3: Forward.</li>
+    <li><b>Ch.7:</b> Case 1: cheese moon and cow Daisy in 1802 are made up. Check a trusted book or ask a teacher. Case 2: favorite color ✅ · school name 🚫 · home address 🚫 · password 🚫 · science fair idea ✅. Case 4: add black, white, grey, tabby, and spotted cats, and kittens and older cats too.</li>
+    <li><b>Final quiz:</b> 1 algorithm · 2 machine · 3 word(s) · 4 hallucinating / a hallucination · 5 False · 6 False · 7 Thinkers.</li>
+    <li><b>Word search:</b> ROBOT is across the top row. DATA is down column 2 (starting at the D in row 2). AI is down column 1 (starting at the A in row 3). BIAS is across the bottom row. LOOP is down column 3 (starting at the L in row 2).</li>
+  </ul>
+  <div class="bubble b"><b>For parents and teachers:</b> Ask your child to explain each idea back in their own words. Teaching is the best way to learn! The key messages: AI is a human-made tool, it learns from data, it can be wrong or unfair, and humans decide how it is used.</div>
+</section>
+
+</body>
+</html>
