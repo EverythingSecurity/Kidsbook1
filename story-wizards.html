@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Story Wizards</title>
+<style>
+:root{
+  --ink:#2b2d42; --page:#ffffff;
+  --pink:#ff6b9d; --blue:#4cc9f0; --yellow:#ffd23f; --green:#6bd38a; --purple:#9b5de5; --orange:#ff9f1c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#ffe3ec;color:var(--ink);font-family:"Chalkboard SE","Comic Sans MS","Marker Felt","Trebuchet MS",sans-serif;font-size:18px;line-height:1.55}
+.page{max-width:820px;margin:24px auto;background:var(--page);border:6px solid var(--ink);border-radius:28px;padding:36px 40px;box-shadow:8px 8px 0 rgba(43,45,66,.25);break-after:page;page-break-after:always}
+h1,h2,h3{line-height:1.15;margin:.2em 0 .4em}
+h1{font-size:2.6rem}
+h2{font-size:2rem;color:var(--purple)}
+h3{font-size:1.3rem;color:var(--pink)}
+.chnum{display:inline-block;background:var(--yellow);border:4px solid var(--ink);border-radius:999px;padding:2px 18px;font-size:1rem;font-weight:bold;transform:rotate(-3deg)}
+.fig{text-align:center;margin:14px 0}
+.fig svg{max-width:100%;height:auto}
+.bubble{background:#e8f9ff;border:4px solid var(--blue);border-radius:22px;padding:12px 18px;margin:14px 0;position:relative}
+.bubble.b{margin-left:70px}
+.bubble.b::before{content:"";position:absolute;left:-26px;top:20px;border:12px solid transparent;border-right:16px solid var(--blue)}
+.fun{background:#fff3c4;border:4px dashed var(--orange);border-radius:18px;padding:12px 18px;margin:16px 0}
+.story{background:#fffaf0;border:4px solid var(--orange);border-radius:18px;padding:12px 20px;margin:14px 0;font-size:1.02em}
+.word{background:var(--yellow);padding:0 8px;border-radius:8px;font-weight:bold}
+.ex{background:#f3eaff;border:5px solid var(--purple);border-radius:24px;padding:16px 22px;margin:22px 0}
+.ex h3{color:var(--purple);margin-top:0}
+.tag{display:inline-block;background:var(--purple);color:#fff;border-radius:999px;padding:0 14px;font-size:.85rem;margin-right:6px}
+.blank{display:inline-block;min-width:120px;border-bottom:3px solid var(--ink)}
+.box{border:3px dashed var(--ink);border-radius:14px;min-height:100px;padding:6px 10px;background:#fff;margin:8px 0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.match{display:grid;grid-template-columns:1fr 60px 1fr;gap:8px 0;align-items:center}
+.match .l,.match .r{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px 12px}
+.match .dot{text-align:center;font-size:1.4rem}
+table{border-collapse:collapse;width:100%;background:#fff}
+th,td{border:3px solid var(--ink);padding:6px 10px;text-align:left}
+th{background:var(--yellow)}
+ul.check{list-style:none;padding-left:0}
+ul.check li::before{content:"☐ ";font-size:1.2em}
+li{margin:4px 0}
+.cover{text-align:center;background:linear-gradient(160deg,#ffe0ef,#fff3c4 55%,#d6f0ff)}
+.cover h1{font-size:3.1rem;color:var(--purple);text-shadow:3px 3px 0 var(--yellow)}
+.cover p.sub{font-size:1.25rem}
+.cert{text-align:center;border-style:double;border-width:14px;background:#fffdf0}
+.small{font-size:.9rem}
+.toolbar{max-width:820px;margin:16px auto 0;text-align:right;padding:0 8px}
+.toolbar button{font:inherit;background:var(--green);border:4px solid var(--ink);border-radius:999px;padding:6px 20px;cursor:pointer}
+@media (max-width:640px){
+  .page{margin:12px 8px;padding:22px 18px;border-width:4px}
+  .cols,.cols3{grid-template-columns:1fr}
+  h1{font-size:2rem}.cover h1{font-size:2.2rem}
+  .bubble.b{margin-left:0}.bubble.b::before{display:none}
+}
+@page{size:A4 portrait;margin:10mm}
+@media print{
+  html,body{background:#fff;font-size:12.5px;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .toolbar{display:none}
+  .page{box-shadow:none;margin:0;border-radius:14px;max-width:none;width:100%;border-width:3px;padding:12px 16px}
+  .page:last-of-type{break-after:auto;page-break-after:auto}
+  h1{font-size:2rem}.cover h1{font-size:2.4rem}
+  h2{font-size:1.5rem;margin:.1em 0 .3em}
+  h3{font-size:1.1rem;margin:.2em 0 .3em}
+  .fig{margin:6px 0}
+  .fig svg{max-height:60mm;width:auto;max-width:100%}
+  .cover .fig svg{max-height:110mm}
+  .fun,.ex,.bubble,.story{padding:8px 12px;margin:8px 0;border-width:3px}
+  .box{min-height:60px}
+  .fun,.ex,.bubble,.story,.fig,table,tr,.match,.cols>div,.cols3>div,li{break-inside:avoid;page-break-inside:avoid}
+  h2,h3{break-after:avoid}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="star" viewBox="0 0 50 50"><path d="M25 3 L31 19 L48 19 L34 29 L40 46 L25 36 L10 46 L16 29 L2 19 L19 19Z" fill="#ffd23f" stroke="#2b2d42" stroke-width="3" stroke-linejoin="round"/></symbol>
+    <!-- Roary the dinosaur guide -->
+    <symbol id="dino" viewBox="0 0 220 220">
+      <g stroke="#2b2d42" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M30 150 q-24 6 -22 26 q22 -6 40 -14Z" fill="#6bd38a"/>
+        <ellipse cx="95" cy="145" rx="62" ry="48" fill="#6bd38a"/>
+        <path d="M70 100 l8 -20 l12 18 l12 -22 l12 20 l12 -16 l6 18" fill="#ff9f1c" stroke-width="4"/>
+        <path d="M135 120 q8 -50 36 -52 q34 0 34 28 q0 24 -30 26 q-18 0 -22 -4Z" fill="#6bd38a"/>
+        <circle cx="170" cy="86" r="10" fill="#fff" stroke-width="4"/><circle cx="173" cy="87" r="4" fill="#2b2d42" stroke="none"/>
+        <path d="M168 108 q14 10 28 -2" fill="none" stroke-width="4"/>
+        <circle cx="152" cy="100" r="6" fill="#ff6b9d" stroke="none" opacity=".7"/>
+        <rect x="68" y="180" width="26" height="32" rx="10" fill="#6bd38a"/><rect x="112" y="180" width="26" height="32" rx="10" fill="#6bd38a"/>
+        <path d="M130 150 q14 4 20 -6" fill="none" stroke-width="5"/>
+      </g>
+      <circle cx="112" cy="150" r="8" fill="#fff" opacity=".5"/><circle cx="85" cy="155" r="6" fill="#fff" opacity=".4"/>
+    </symbol>
+    <!-- Selena the salt shaker -->
+    <symbol id="salt" viewBox="0 0 120 200">
+      <g stroke="#2b2d42" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M32 60 h56 l10 120 q0 14 -38 14 q-38 0 -38 -14Z" fill="#e8f9ff"/>
+        <path d="M28 60 q32 -50 64 0Z" fill="#c8cdd6"/>
+        <circle cx="52" cy="34" r="2" fill="#2b2d42"/><circle cx="68" cy="38" r="2" fill="#2b2d42"/><circle cx="60" cy="26" r="2" fill="#2b2d42"/>
+        <circle cx="46" cy="100" r="9" fill="#fff"/><circle cx="76" cy="100" r="9" fill="#fff"/>
+        <circle cx="48" cy="102" r="4" fill="#2b2d42" stroke="none"/><circle cx="78" cy="102" r="4" fill="#2b2d42" stroke="none"/>
+        <path d="M46 126 q16 16 32 0" fill="none"/>
+        <circle cx="36" cy="120" r="5" fill="#ff6b9d" stroke="none" opacity=".7"/><circle cx="88" cy="120" r="5" fill="#ff6b9d" stroke="none" opacity=".7"/>
+        <path d="M32 150 h58" fill="none" stroke="#4cc9f0" stroke-width="8"/>
+      </g>
+    </symbol>
+    <!-- sock puppet -->
+    <symbol id="puppet" viewBox="0 0 140 200">
+      <g stroke="#2b2d42" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M40 190 L40 90 Q40 20 80 20 Q122 20 122 80 Q122 110 90 120 L90 190Z" fill="#ff6b9d"/>
+        <path d="M40 150 H90" stroke-width="4"/>
+        <circle cx="64" cy="58" r="12" fill="#fff"/><circle cx="98" cy="58" r="12" fill="#fff"/>
+        <circle cx="66" cy="60" r="5" fill="#2b2d42" stroke="none"/><circle cx="100" cy="60" r="5" fill="#2b2d42" stroke="none"/>
+        <path d="M60 90 q22 24 46 0 q-22 10 -46 0Z" fill="#c0392b"/>
+        <path d="M56 22 l-12 -14 M104 22 l12 -14" fill="none"/><circle cx="43" cy="7" r="5" fill="#ffd23f"/><circle cx="116" cy="7" r="5" fill="#ffd23f"/>
+      </g>
+    </symbol>
+    <symbol id="book" viewBox="0 0 160 120">
+      <g stroke="#2b2d42" stroke-width="5" stroke-linejoin="round">
+        <path d="M80 20 Q45 4 10 14 V100 Q45 90 80 108Z" fill="#fff3c4"/>
+        <path d="M80 20 Q115 4 150 14 V100 Q115 90 80 108Z" fill="#ffe0ef"/>
+        <path d="M24 34 q22 -4 44 6 M24 52 q22 -4 44 6 M96 40 q22 -10 44 -6 M96 58 q22 -10 44 -6" fill="none" stroke-width="3"/>
+      </g>
+    </symbol>
+    <symbol id="bear" viewBox="0 0 120 120">
+      <g stroke="#2b2d42" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+        <circle cx="26" cy="28" r="16" fill="#a8672a"/><circle cx="94" cy="28" r="16" fill="#a8672a"/>
+        <circle cx="60" cy="62" r="44" fill="#c68642"/>
+        <ellipse cx="60" cy="78" rx="20" ry="15" fill="#f1d3a1"/>
+        <circle cx="44" cy="52" r="5" fill="#2b2d42" stroke="none"/><circle cx="76" cy="52" r="5" fill="#2b2d42" stroke="none"/>
+        <ellipse cx="60" cy="70" rx="7" ry="5" fill="#2b2d42"/>
+        <path d="M60 75 v6 M52 84 q8 6 16 0" fill="none" stroke-width="4"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="toolbar"><button onclick="window.print()">🖨️ Print my book</button></div>
+
+<!-- COVER -->
+<section class="page cover">
+  <div class="fig"><svg viewBox="0 0 520 330" width="520" role="img" aria-label="Roary the dinosaur, Selena the salt shaker and a puppet around a big open storybook">
+    <circle cx="260" cy="170" r="150" fill="#fff" opacity=".6"/>
+    <use href="#star" x="30" y="30" width="56" height="56"/><use href="#star" x="450" y="24" width="46" height="46"/><use href="#star" x="470" y="200" width="38" height="38"/>
+    <use href="#book" x="170" y="200" width="180" height="110"/>
+    <use href="#dino" x="10" y="90" width="210" height="210"/>
+    <use href="#salt" x="228" y="20" width="66" height="110"/>
+    <use href="#puppet" x="360" y="100" width="120" height="171"/>
+  </svg></div>
+  <h1>Story Wizards</h1>
+  <p class="sub">How to make up amazing stories, then use them to pitch, advertise, and sell your big ideas!</p>
+  <p style="font-size:1.2rem"><b>Written by: Mayank Sharma</b></p>
+  <p>Part 1: Story Wizards &nbsp;•&nbsp; Part 2: Story Inventors</p>
+  <p>Characters • Silly problems • Story games • Pitches • Ads • Jingles</p>
+</section>
+
+<!-- WELCOME -->
+<section class="page">
+  <h2>Hi! I'm Roary! 🦖</h2>
+  <div class="fig"><svg viewBox="0 0 300 230" width="260"><use href="#dino" x="40" y="5" width="220" height="220"/></svg></div>
+  <div class="bubble b"><b>Roary says:</b> "Every story you've ever loved was made by somebody who asked, <i>'What if…?'</i> Today, that somebody is YOU. I'll show you the secret recipe that story wizards use!"</div>
+  <p>Stories aren't just for fun (though they ARE super fun). Stories help us:</p>
+  <div class="cols3">
+    <div class="fun" style="text-align:center">💬<br><b>Explain big ideas</b><br><small>in a way anyone gets</small></div>
+    <div class="fun" style="text-align:center;background:#e8f9ff;border-color:var(--blue)">❤️<br><b>Feel what others feel</b><br><small>that's called empathy</small></div>
+    <div class="fun" style="text-align:center;background:#e9fff1;border-color:var(--green)">🧠<br><b>Remember things</b><br><small>and solve problems</small></div>
+  </div>
+  <h3>Your Story Wizard checklist</h3>
+  <ul class="check">
+    <li>Grab a pencil and crayons</li>
+    <li>Do every <b>"Your Turn"</b> box. Silly answers are allowed!</li>
+    <li>Play the story games with family and friends</li>
+    <li>Tell one story out loud by the end of this book</li>
+  </ul>
+  <div class="fun"><b>The Magic Recipe:</b> every story has <span class="word">Character</span> + <span class="word">Setting</span> + <span class="word">Problem</span> + <span class="word">Action</span>. Let's learn each one!</div>
+  <div class="fun" style="background:#e9fff1;border-color:var(--green)"><b>Your adventure has two parts:</b><br>
+    <b>Part 1: Story Wizards</b> (Chapters 1–8). Invent heroes, places, problems and adventures.<br>
+    <b>Part 2: Story Inventors</b> (Chapters 9–12). Use your story powers to pitch ideas, make ads, handle tricky customers, and run your own Inventor's Showcase!</div>
+</section>
+
+<!-- CH1 CHARACTER -->
+<section class="page">
+  <span class="chnum">Chapter 1</span>
+  <h2>Character: Who is it about? 🧙</h2>
+  <p>A story starts with a <span class="word">character</span>, someone we care about. Characters don't have to be people! They can be <b>animals, toys, food, or even a salt shaker</b>.</p>
+  <div class="fig"><svg viewBox="0 0 560 230" width="540" role="img" aria-label="Selena the Salt Shaker with her name tag and three trait bubbles">
+    <use href="#salt" x="210" y="10" width="115" height="190"/>
+    <g stroke="#2b2d42" stroke-width="4"><rect x="195" y="196" width="140" height="28" rx="8" fill="#fff3c4"/></g>
+    <text x="265" y="216" font-size="15" text-anchor="middle" fill="#2b2d42" font-weight="bold">Selena the Salt Shaker</text>
+    <g stroke="#2b2d42" stroke-width="4"><ellipse cx="80" cy="60" rx="70" ry="30" fill="#e9fff1"/><ellipse cx="90" cy="130" rx="70" ry="30" fill="#e8f9ff"/><ellipse cx="480" cy="90" rx="75" ry="34" fill="#ffe0ef"/></g>
+    <g font-size="15" text-anchor="middle" fill="#2b2d42"><text x="80" y="65">Brave</text><text x="90" y="135">Curious</text><text x="480" y="87">Afraid of</text><text x="480" y="106">the dark</text></g>
+    <path d="M150 70 L205 100 M158 130 L205 120 M405 95 L335 110" stroke="#2b2d42" stroke-width="3" fill="none" stroke-dasharray="6 5"/>
+  </svg></div>
+  <h3>The 3 secrets of a great character</h3>
+  <ol>
+    <li><b>A name that's fun to say.</b> Names that start with the same sound are extra catchy: <i>Selena the Salt Shaker, Benny the Brave Bunny, Peter the Purple Penguin.</i></li>
+    <li><b>An age or stage.</b> Is she brand-new? A grandpa turtle? A baby cloud?</li>
+    <li><b>2 or 3 personality traits</b>, like brave, curious, grumpy, shy… <i>and one little flaw!</i> (Selena is brave but afraid of the dark. Flaws make characters feel real.)</li>
+  </ol>
+  <div class="fun">🎁 <b>Story Wizard trick:</b> Let your audience help! Ask, "What should we name her?" When friends pick the name, they care about the story even more.</div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Build a character</h3>
+    <p><b>1. Alliteration practice.</b> Finish the names:&nbsp; Sammy the S________ &nbsp; Dora the D________ &nbsp; Marvin the M________</p>
+    <p><b>2. Make your own hero!</b></p>
+    <table>
+      <tr><th style="width:35%">Name</th><td></td></tr>
+      <tr><th>What is it? (animal, toy, food…)</th><td></td></tr>
+      <tr><th>Age or stage</th><td></td></tr>
+      <tr><th>2 good traits</th><td></td></tr>
+      <tr><th>1 little flaw or fear</th><td></td></tr>
+    </table>
+    <p><b>3. Draw your character here:</b></p>
+    <div class="box" style="min-height:130px"></div>
+  </div>
+</section>
+
+<!-- CH2 SETTING -->
+<section class="page">
+  <span class="chnum">Chapter 2</span>
+  <h2>Setting: Where and when? 🗺️</h2>
+  <p>The <span class="word">setting</span> is the place and time of your story. Story wizards choose between two kinds:</p>
+  <div class="cols">
+    <div class="fun" style="background:#e9fff1;border-color:var(--green)"><b>🏠 Logical setting</b><br>A place that makes sense for your character. It feels cozy and familiar.<br><small>Salt shaker on a kitchen shelf. Fish in the ocean. Kid on a playground.</small></div>
+    <div class="fun" style="background:#ffe0ef;border-color:var(--pink)"><b>🎪 Surprising setting</b><br>A place that does NOT belong. It makes us ask, "Wait, how did <i>that</i> happen?!"<br><small>Salt shaker at the bottom of a toy box. Santa on a tropical beach!</small></div>
+  </div>
+  <div class="fig"><svg viewBox="0 0 620 200" width="600" role="img" aria-label="Left: Santa-like figure on a snowy hill. Right: the same figure on a sunny beach with a palm tree">
+    <rect x="5" y="5" width="295" height="190" rx="16" fill="#e8f9ff" stroke="#2b2d42" stroke-width="4"/>
+    <rect x="320" y="5" width="295" height="190" rx="16" fill="#fff3c4" stroke="#2b2d42" stroke-width="4"/>
+    <path d="M5 150 q80 -40 295 0 V195 H5Z" fill="#fff" stroke="#2b2d42" stroke-width="4"/>
+    <path d="M320 150 q150 -20 295 0 V195 H320Z" fill="#ffe29a" stroke="#2b2d42" stroke-width="4"/>
+    <circle cx="560" cy="45" r="24" fill="#ff9f1c" stroke="#2b2d42" stroke-width="4"/>
+    <g stroke="#2b2d42" stroke-width="4" stroke-linecap="round"><path d="M390 150 q-6 -50 6 -80" fill="none" stroke-width="7"/><path d="M396 70 q-30 -8 -46 14 M396 70 q30 -14 48 6 M396 70 q-4 -22 14 -34" fill="none" stroke="#2b7a4b"/></g>
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round">
+      <circle cx="150" cy="105" r="18" fill="#ffd9b8"/><path d="M130 100 q20 -34 40 0Z" fill="#e63946"/><rect x="132" y="120" width="36" height="40" rx="12" fill="#e63946"/><path d="M138 112 q12 18 24 0" fill="#fff"/>
+      <circle cx="480" cy="110" r="18" fill="#ffd9b8"/><path d="M460 105 q20 -34 40 0Z" fill="#e63946"/><rect x="462" y="125" width="36" height="35" rx="12" fill="#e63946"/><path d="M468 117 q12 18 24 0" fill="#fff"/>
+    </g>
+    <g font-size="15" text-anchor="middle" fill="#2b2d42" font-weight="bold"><text x="150" y="185">Logical: the North Pole</text><text x="468" y="185">Surprising: a beach!</text></g>
+  </svg></div>
+  <div class="bubble b"><b>Roary:</b> "Use <i>logical</i> when you want a cozy story. Use <i>surprising</i> when you want a funny or exciting one!"</div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Where in the world?</h3>
+    <p><b>1.</b> Write <b>L</b> (logical) or <b>S</b> (surprising) for each:</p>
+    <ol>
+      <li>A cow in a barn: ___</li>
+      <li>A cow on the Moon: ___</li>
+      <li>A penguin in a bathtub full of spaghetti: ___</li>
+      <li>A teacher in a classroom: ___</li>
+      <li>A teddy bear inside a washing machine: ___</li>
+    </ol>
+    <p><b>2.</b> Take your hero from Chapter 1. Give them a <b>logical</b> home and a <b>surprising</b> place they get lost in:</p>
+    <p>Logical: <span class="blank" style="min-width:60%"></span><br>Surprising: <span class="blank" style="min-width:60%"></span></p>
+    <p><b>3.</b> Draw the surprising setting. What time of day is it?</p>
+    <div class="box" style="min-height:110px"></div>
+  </div>
+</section>
+
+<!-- CH3 PROBLEM -->
+<section class="page">
+  <span class="chnum">Chapter 3</span>
+  <h2>Problem: Oh no! What now? 😱</h2>
+  <p>A story with no problem is like a roller coaster with no hills: boring! The <span class="word">problem</span> is what makes your character DO something. There are 3 kinds:</p>
+  <div class="fig"><svg viewBox="0 0 640 200" width="620" role="img" aria-label="Three signs: helpful problem, silly problem, high-stakes problem">
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round">
+      <rect x="10" y="20" width="195" height="150" rx="18" fill="#e8f9ff"/><rect x="222" y="20" width="195" height="150" rx="18" fill="#ffe0ef"/><rect x="434" y="20" width="195" height="150" rx="18" fill="#ffe9c9"/>
+    </g>
+    <g font-size="38" text-anchor="middle"><text x="107" y="75">🏫</text><text x="319" y="75">🤪</text><text x="531" y="75">🚨</text></g>
+    <g font-size="16" text-anchor="middle" fill="#2b2d42" font-weight="bold"><text x="107" y="105">HELPFUL</text><text x="319" y="105">SILLY</text><text x="531" y="105">HIGH-STAKES</text></g>
+    <g font-size="13" text-anchor="middle" fill="#2b2d42"><text x="107" y="128">Something real kids face:</text><text x="107" y="146">a new school, a fear</text><text x="319" y="128">Funny and ridiculous:</text><text x="319" y="146">a sneezing volcano!</text><text x="531" y="128">Urgent and big:</text><text x="531" y="146">save friends in time!</text></g>
+  </svg></div>
+  <table>
+    <tr><th>Kind</th><th>Why it's great</th><th>Example</th></tr>
+    <tr><td><b>Helpful</b></td><td>Helps us face things we really feel</td><td>Pip is nervous about his first day at school.</td></tr>
+    <tr><td><b>Silly</b></td><td>Makes us laugh and keeps us listening</td><td>The moon is hiccuping and knocking down stars.</td></tr>
+    <tr><td><b>High-stakes</b></td><td>Makes our hearts beat fast</td><td>The bridge is melting and friends are crossing!</td></tr>
+  </table>
+  <div class="fun">🔑 <b>Secret:</b> The best problems are things your character really, really wants to fix. What does Selena want? To get home before dinner!</div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Problem sorter</h3>
+    <p><b>1.</b> Write <b>H</b> (helpful), <b>S</b> (silly) or <b>HS</b> (high-stakes):</p>
+    <ol>
+      <li>A shy rabbit wants to make a friend at the park: ___</li>
+      <li>A giant sneeze has blown all the clouds into one big fluffy pile: ___</li>
+      <li>The rocket's engine is breaking and the astronauts must get home in 10 minutes: ___</li>
+      <li>A dragon is scared to try broccoli: ___</li>
+      <li>A cat's tail has turned into spaghetti: ___</li>
+    </ol>
+    <p><b>2.</b> What problem does <b>your</b> hero face? Pick a kind, then write it in one sentence:</p>
+    <div class="box" style="min-height:70px"></div>
+    <p><b>3. Bonus:</b> Make it worse! Add something that makes the problem trickier:</p>
+    <div class="box" style="min-height:60px"></div>
+  </div>
+</section>
+
+<!-- CH4 ACTION -->
+<section class="page">
+  <span class="chnum">Chapter 4</span>
+  <h2>Action: Climb the Story Mountain! ⛰️</h2>
+  <p>The <span class="word">action</span> is how your character solves the problem, step by step. Think of it as climbing a mountain:</p>
+  <div class="fig"><svg viewBox="0 0 640 280" width="620" role="img" aria-label="Story mountain with 5 numbered stops: introduction, problem, attempts and complications, resolution, takeaway">
+    <path d="M20 230 L130 160 L230 120 L320 40 L430 120 L520 190 L620 230Z" fill="#e9fff1" stroke="#2b2d42" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M300 62 L320 40 L340 62 L330 56 L320 66 L310 56Z" fill="#fff" stroke="#2b2d42" stroke-width="3" stroke-linejoin="round"/>
+    <g stroke="#2b2d42" stroke-width="4"><circle cx="50" cy="212" r="18" fill="#ffd23f"/><circle cx="150" cy="148" r="18" fill="#ff6b9d"/><circle cx="240" cy="113" r="18" fill="#4cc9f0"/><circle cx="320" cy="30" r="18" fill="#9b5de5"/><circle cx="560" cy="212" r="18" fill="#6bd38a"/></g>
+    <g font-size="18" font-weight="bold" text-anchor="middle" fill="#2b2d42"><text x="50" y="219">1</text><text x="150" y="155">2</text><text x="240" y="120">3</text><text x="320" y="37" fill="#fff">4</text><text x="560" y="219">5</text></g>
+    <g font-size="14" fill="#2b2d42" text-anchor="middle"><text x="60" y="262">Meet the hero</text><text x="150" y="202" >Uh-oh!</text><text x="255" y="95" >Try, try again</text><text x="430" y="40">Solved it!</text><text x="560" y="262">What I learned</text></g>
+  </svg></div>
+  <ol>
+    <li><b>Introduction:</b> Meet the character and the setting. "Once upon a time…"</li>
+    <li><b>Problem:</b> Something goes wrong!</li>
+    <li><b>Attempts and complications:</b> The hero tries a plan… and it doesn't work! So they try something else. (Try at least <b>two</b> things!)</li>
+    <li><b>Resolution:</b> Hooray, the problem is solved, through courage, teamwork, or clever thinking!</li>
+    <li><b>Takeaway:</b> How has the hero changed? What did they learn?</li>
+  </ol>
+  <div class="bubble b"><b>Roary:</b> "Heroes who win on the first try are boring! Failing is the fun part: it shows our hero never gives up."</div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Fill the mountain</h3>
+    <p>Use your own hero, setting, and problem from the last chapters:</p>
+    <table>
+      <tr><th style="width:30%">1. Introduction</th><td style="height:46px"></td></tr>
+      <tr><th>2. Problem</th><td style="height:46px"></td></tr>
+      <tr><th>3a. First try (fails!)</th><td style="height:46px"></td></tr>
+      <tr><th>3b. Second try</th><td style="height:46px"></td></tr>
+      <tr><th>4. Resolution</th><td style="height:46px"></td></tr>
+      <tr><th>5. Takeaway</th><td style="height:46px"></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- MODEL STORY -->
+<section class="page">
+  <span class="chnum">Story Time</span>
+  <h2>Selena the Salt Shaker and the Toy Box 📖</h2>
+  <div class="fig"><svg viewBox="0 0 560 190" width="540" role="img" aria-label="Selena at the bottom of a dark toy box with a toy dinosaur, a toy car with headlights, and blocks">
+    <rect x="10" y="10" width="540" height="170" rx="16" fill="#2b2d42" stroke="#2b2d42" stroke-width="4"/>
+    <g fill="#fff"><circle cx="40" cy="30" r="2"/><circle cx="500" cy="40" r="2"/></g>
+    <use href="#salt" x="70" y="35" width="70" height="116"/>
+    <use href="#dino" x="200" y="40" width="130" height="130"/>
+    <g stroke="#fff" stroke-width="3" stroke-linejoin="round"><rect x="380" y="110" width="90" height="40" rx="12" fill="#4cc9f0"/></g>
+    <circle cx="400" cy="152" r="12" fill="#2b2d42" stroke="#fff" stroke-width="3"/><circle cx="450" cy="152" r="12" fill="#2b2d42" stroke="#fff" stroke-width="3"/>
+    <path d="M470 125 L545 100 L545 150Z" fill="#ffd23f" opacity=".5"/><circle cx="470" cy="125" r="6" fill="#ffd23f"/>
+    <rect x="345" y="130" width="30" height="30" fill="#ff6b9d" stroke="#fff" stroke-width="3"/><rect x="345" y="100" width="30" height="30" fill="#6bd38a" stroke="#fff" stroke-width="3"/>
+  </svg></div>
+  <div class="story">
+    <p><b>Introduction.</b> Selena the Salt Shaker was a brave and curious shaker who lived on the kitchen spice shelf. She was brand-new, and she was afraid of one thing only: the dark.</p>
+    <p><b>Problem.</b> One morning, <i>CLUNK!</i> Selena tumbled off the shelf, bounced into a toy box, and slid all the way to the bottom. It was dark. It smelled like crayons and old socks. "Oh no!" cried Selena. "Pizza night is tonight, and the family needs me before dinner!"</p>
+    <p><b>First try.</b> "HELP!" she shouted. But the toys were fast asleep, and Selena was very small. Nobody heard her. Then she tried to roll up the slippery wall of the toy box. <i>Whoosh!</i> She slid right back down.</p>
+    <p><b>Second try.</b> Selena took a deep breath. "Maybe I can't do this alone," she whispered. She sprinkled a few salt crystals, and they went <i>tinkle-tinkle</i> on a rubber dinosaur's nose. "Achoo!" sneezed Rex the dinosaur. "Who's there?"</p>
+    <p>"I'm Selena! I'm stuck, and it's too dark to see."</p>
+    <p>"Don't worry," said Rex. "Pip, turn on your headlights!" Pip the toy car beamed two golden lights, and Selena wasn't afraid anymore. Together, Rex stacked the blocks into stairs, one, two, three, four.</p>
+    <p><b>Resolution.</b> Selena climbed the stairs and hopped out just as the family walked into the kitchen. <i>Sprinkle, sprinkle!</i> The pizza was perfect.</p>
+    <p><b>Takeaway.</b> That night, Selena sat proudly on the shelf. She had learned that being brave doesn't mean doing everything alone. Sometimes being brave means asking for help.</p>
+  </div>
+  <div class="fun">🕵️ <b>Story detective:</b> Can you spot the 4 secrets? <b>Character</b> = Selena. <b>Setting</b> = a toy box (surprising!). <b>Problem</b> = stuck before dinner. <b>Action</b> = two tries, then teamwork.</div>
+</section>
+
+<!-- CH5 BEGINNING MIDDLE END -->
+<section class="page">
+  <span class="chnum">Chapter 5</span>
+  <h2>Beginning, Middle, End and the Because Chain 🔗</h2>
+  <div class="fig"><svg viewBox="0 0 620 130" width="600" role="img" aria-label="Three boxes: beginning setup, middle conflict, end resolution joined by arrows">
+    <defs><marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#2b2d42"/></marker></defs>
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"><rect x="10" y="20" width="170" height="90" rx="16" fill="#e8f9ff"/><rect x="225" y="20" width="170" height="90" rx="16" fill="#ffe0ef"/><rect x="440" y="20" width="170" height="90" rx="16" fill="#e9fff1"/>
+    <path d="M182 65 H222 M397 65 H437" fill="none" marker-end="url(#arw)"/></g>
+    <g font-size="17" font-weight="bold" text-anchor="middle" fill="#2b2d42"><text x="95" y="58">BEGINNING</text><text x="310" y="58">MIDDLE</text><text x="525" y="58">END</text></g>
+    <g font-size="13" text-anchor="middle" fill="#2b2d42"><text x="95" y="82">Set it up</text><text x="310" y="82">Trouble &amp; tries</text><text x="525" y="82">Fixed &amp; changed</text></g>
+  </svg></div>
+  <p>Every story has a <b>beginning</b> (set it up), a <b>middle</b> (trouble and tries), and an <b>end</b> (the problem is solved and something has changed).</p>
+  <h3>The Because Chain</h3>
+  <p>Great stories aren't just "this happened, then this happened." Each thing happens <i>because</i> of the thing before it. That's called <span class="word">cause and effect</span>:</p>
+  <div class="fig"><svg viewBox="0 0 620 90" width="600" aria-label="Chain: Selena fell, so she was stuck, so she called, so Rex woke">
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"><rect x="5" y="15" width="130" height="55" rx="14" fill="#fff3c4"/><rect x="165" y="15" width="130" height="55" rx="14" fill="#ffe0ef"/><rect x="325" y="15" width="130" height="55" rx="14" fill="#e8f9ff"/><rect x="485" y="15" width="130" height="55" rx="14" fill="#e9fff1"/></g>
+    <g font-size="13" text-anchor="middle" fill="#2b2d42"><text x="70" y="38">Selena fell</text><text x="70" y="56">off the shelf</text><text x="230" y="38">so she was</text><text x="230" y="56">stuck</text><text x="390" y="38">so salt landed</text><text x="390" y="56">on Rex's nose</text><text x="550" y="38">so Rex woke</text><text x="550" y="56">and helped</text></g>
+    <g font-size="20" fill="#9b5de5" font-weight="bold" text-anchor="middle"><text x="150" y="48">→</text><text x="310" y="48">→</text><text x="470" y="48">→</text></g>
+  </svg></div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Story detective</h3>
+    <p><b>1. Fix the scrambled story!</b> Number the sentences 1 to 5:</p>
+    <ul style="list-style:none;padding-left:0">
+      <li>___ The turtle crossed the finish line, tired but proud.</li>
+      <li>___ Tilly the Turtle entered the big forest race.</li>
+      <li>___ She zoomed ahead… then fell asleep under a tree!</li>
+      <li>___ All the animals giggled when they saw her snoring.</li>
+      <li>___ She woke up, remembered "slow and steady," and kept walking.</li>
+    </ul>
+    <p><b>2. Finish the Because Chain:</b></p>
+    <p>The ice cream fell on the ground, <b>so</b> <span class="blank" style="min-width:40%"></span>, <b>so</b> <span class="blank" style="min-width:40%"></span>.</p>
+    <p><b>3. Which part is it?</b> Write B, M or E: &nbsp; "Once upon a time there was a little fox" ___ &nbsp; "The fox got lost in the storm" ___ &nbsp; "Now the fox knows the way home" ___</p>
+  </div>
+</section>
+
+<!-- CH6 SENSES OPPOSITES DIALOGUE -->
+<section class="page">
+  <span class="chnum">Chapter 6</span>
+  <h2>Sparkle Words: Senses, Opposites, and Talking! ✨</h2>
+  <h3>1. Wake up the five senses</h3>
+  <div class="fig"><svg viewBox="0 0 640 140" width="620" role="img" aria-label="Five senses: sight eye, hearing ear, smell nose, taste tongue, touch hand">
+    <g stroke="#2b2d42" stroke-width="4"><circle cx="64" cy="55" r="42" fill="#e8f9ff"/><circle cx="192" cy="55" r="42" fill="#ffe0ef"/><circle cx="320" cy="55" r="42" fill="#e9fff1"/><circle cx="448" cy="55" r="42" fill="#fff3c4"/><circle cx="576" cy="55" r="42" fill="#f3eaff"/></g>
+    <g font-size="36" text-anchor="middle"><text x="64" y="68">👀</text><text x="192" y="68">👂</text><text x="320" y="68">👃</text><text x="448" y="68">👅</text><text x="576" y="68">✋</text></g>
+    <g font-size="14" text-anchor="middle" fill="#2b2d42" font-weight="bold"><text x="64" y="125">SEE</text><text x="192" y="125">HEAR</text><text x="320" y="125">SMELL</text><text x="448" y="125">TASTE</text><text x="576" y="125">TOUCH</text></g>
+  </svg></div>
+  <p>Don't just say "it was dark." Say <i>"It was dark, and it smelled like crayons and old socks."</i> Sensory words make listeners feel like they're really there!</p>
+
+  <h3>2. Use opposites</h3>
+  <p>Story wizards love <b>contrast</b>: huge and tiny, brave and scared, happy and sad. Opposites make characters and problems pop. A <i>tiny</i> salt shaker in a <i>giant</i> dark toy box feels exciting!</p>
+
+  <h3>3. Let your characters talk</h3>
+  <div class="fig"><svg viewBox="0 0 460 150" width="420" aria-label="Two speech bubbles from Selena and Rex">
+    <use href="#salt" x="10" y="30" width="60" height="100"/><use href="#dino" x="360" y="25" width="95" height="95"/>
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"><path d="M90 20 h170 q14 0 14 14 v32 q0 14 -14 14 h-130 l-30 18 l8 -18 q-18 0 -18 -14 v-32 q0 -14 14 -14Z" fill="#e8f9ff"/><path d="M360 85 l-14 -4 h-70 q-14 0 -14 -14 v-4" fill="none"/></g>
+    <text x="175" y="46" font-size="14" text-anchor="middle" fill="#2b2d42">"Hello? Is anyone</text><text x="175" y="64" font-size="14" text-anchor="middle" fill="#2b2d42">out there?"</text>
+  </svg></div>
+  <p>Instead of "Selena asked for help," write: <b>"Please, can somebody help me?" whispered Selena.</b> Talking brings a story to life.</p>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Sparkle it up!</h3>
+    <p><b>1. Sensory upgrade.</b> Make this sentence sparkle with a smell, a sound, and a feeling:</p>
+    <p>Boring: "The bakery was nice."<br>Sparkly: <span class="blank" style="min-width:80%"></span></p>
+    <p><b>2. Match the opposites:</b></p>
+    <div class="match">
+      <div class="l">giant</div><div class="dot">⟷</div><div class="r">quiet</div>
+      <div class="l">brave</div><div class="dot">⟷</div><div class="r">tiny</div>
+      <div class="l">loud</div><div class="dot">⟷</div><div class="r">scared</div>
+    </div>
+    <p><b>3. Add talking.</b> Turn into dialogue: "The dragon said he was hungry."<br><span class="blank" style="min-width:90%"></span></p>
+    <p><b>4. Senses scavenger hunt:</b> Look around the room. Write one thing you can SEE ____ HEAR ____ SMELL ____ TOUCH ____</p>
+  </div>
+</section>
+
+<!-- CH7 GAMES -->
+<section class="page">
+  <span class="chnum">Chapter 7</span>
+  <h2>Story Games! 🎲</h2>
+  <p>Stories are best when we <b>play</b> with them. Try these with friends and family!</p>
+  <div class="fun" style="background:#e8f9ff;border-color:var(--blue)">
+    <h3>⭕ Game 1: Story Circle</h3>
+    Sit in a circle. The first person starts with a sentence like <i>"One day, a purple penguin found a map."</i> Each person adds <b>one sentence</b>. Listen carefully so your sentence fits!
+  </div>
+  <div class="fun" style="background:#e9fff1;border-color:var(--green)">
+    <h3>🔄 Game 2: Fortunately / Unfortunately</h3>
+    Take turns, switching between good and bad news:<br>
+    <i>"Fortunately, the bus arrived."</i> → <i>"Unfortunately, it turned into an airplane and flew away!"</i> → <i>"Fortunately, I had a parachute…"</i> This trains your brain to bounce back from surprises!
+  </div>
+  <div class="fun" style="background:#ffe0ef;border-color:var(--pink)">
+    <h3>🎒 Game 3: In This Bag Is a Story</h3>
+    Put 5 random objects in a bag (a spoon, a sock, a key…). Pull them out one at a time and weave each one into the story as you tell it.
+  </div>
+  <div class="cols">
+    <div class="fun" style="background:#f3eaff;border-color:var(--purple)">
+      <h3>🧦 Game 4: Puppet Show</h3>
+      Make a puppet from a sock! Give it a name and a voice. Puppets help shy storytellers feel brave, and they make everyone giggle.
+      <div class="fig"><svg viewBox="0 0 140 200" width="90"><use href="#puppet" x="0" y="0" width="140" height="200"/></svg></div>
+    </div>
+    <div class="fun">
+      <h3>🖼️ Game 5: Storyboard</h3>
+      Draw your story as a comic strip, one picture per step. Seeing the story helps you remember the order!
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Draw your story board</h3>
+    <p>Make a comic strip of the story you planned on the Story Mountain. Add a few words under each picture.</p>
+    <div class="fig"><svg viewBox="0 0 640 380" width="640" role="img" aria-label="Six blank storyboard frames to draw in">
+      <g fill="#fff" stroke="#2b2d42" stroke-width="4" stroke-dasharray="8 6"><rect x="10" y="10" width="200" height="130" rx="10"/><rect x="220" y="10" width="200" height="130" rx="10"/><rect x="430" y="10" width="200" height="130" rx="10"/><rect x="10" y="210" width="200" height="130" rx="10"/><rect x="220" y="210" width="200" height="130" rx="10"/><rect x="430" y="210" width="200" height="130" rx="10"/></g>
+      <g fill="#2b2d42"><circle cx="30" cy="30" r="14"/><circle cx="240" cy="30" r="14"/><circle cx="450" cy="30" r="14"/><circle cx="30" cy="230" r="14"/><circle cx="240" cy="230" r="14"/><circle cx="450" cy="230" r="14"/></g>
+      <g fill="#fff" font-size="15" font-weight="bold" text-anchor="middle"><text x="30" y="35">1</text><text x="240" y="35">2</text><text x="450" y="35">3</text><text x="30" y="235">4</text><text x="240" y="235">5</text><text x="450" y="235">6</text></g>
+      <g stroke="#2b2d42" stroke-width="3"><path d="M10 170 H210 M220 170 H420 M430 170 H630 M10 370 H210 M220 370 H420 M430 370 H630"/></g>
+    </svg></div>
+    <h3>Game scoreboard</h3>
+    <table>
+      <tr><th>Game</th><th>Who played</th><th>Funniest moment</th><th>Fun (1–5 stars)</th></tr>
+      <tr><td>Story Circle</td><td></td><td></td><td></td></tr>
+      <tr><td>Fortunately / Unfortunately</td><td></td><td></td><td></td></tr>
+      <tr><td>In This Bag…</td><td></td><td></td><td></td></tr>
+      <tr><td>Puppet Show</td><td></td><td></td><td></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- CH8 QUESTIONS -->
+<section class="page">
+  <span class="chnum">Chapter 8</span>
+  <h2>Story Detective Questions 🕵️</h2>
+  <p>The best stories are <i>conversations</i>! Great listeners (and tellers) ask questions. Here are five kinds. They'll use Selena's story as practice.</p>
+  <table>
+    <tr><th>Question type</th><th>What it does</th><th>Example</th></tr>
+    <tr><td><b>1. Fill-in</b></td><td>Helps us remember repeated words</td><td>"Selena sprinkled, sprinkled, ______!"</td></tr>
+    <tr><td><b>2. Remember</b></td><td>Checks the facts</td><td>"Who turned on his headlights?"</td></tr>
+    <tr><td><b>3. Guess the feeling</b></td><td>Builds empathy</td><td>"How did Selena feel in the dark?"</td></tr>
+    <tr><td><b>4. Predict</b></td><td>Makes us think ahead</td><td>"What do you think happens next?"</td></tr>
+    <tr><td><b>5. Connect</b></td><td>Links the story to your own life</td><td>"Have you ever felt nervous in a new place?"</td></tr>
+  </table>
+  <div class="fig"><svg viewBox="0 0 400 150" width="340" aria-hidden="true"><use href="#dino" x="140" y="10" width="130" height="130"/><g stroke="#2b2d42" stroke-width="6" stroke-linecap="round"><circle cx="330" cy="60" r="30" fill="#e8f9ff" opacity=".9"/><path d="M308 82 L275 118" stroke-width="10"/></g><text x="330" y="72" font-size="32" text-anchor="middle">❓</text></svg></div>
+
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Question time</h3>
+    <p><b>1. Name that question!</b> Draw lines.</p>
+    <div class="match">
+      <div class="l">"What will Rex do next?"</div><div class="dot">⟷</div><div class="r">Remember</div>
+      <div class="l">"Who is Pip?"</div><div class="dot">⟷</div><div class="r">Connect</div>
+      <div class="l">"Have you ever asked a friend for help?"</div><div class="dot">⟷</div><div class="r">Predict</div>
+    </div>
+    <p><b>2. Be the question maker.</b> Write one of each kind about <i>your own</i> story:</p>
+    <p>Remember: <span class="blank" style="min-width:70%"></span><br>Feeling: <span class="blank" style="min-width:70%"></span><br>Predict: <span class="blank" style="min-width:70%"></span><br>Connect: <span class="blank" style="min-width:70%"></span></p>
+    <p><b>3. Interview!</b> Tell your story to a friend or grown-up, then ask them one of your questions. What did they say?</p>
+    <div class="box" style="min-height:60px"></div>
+  </div>
+</section>
+
+<!-- ================= PART 2 ================= -->
+<!-- CH9 PITCH -->
+<section class="page">
+  <div class="fig"><span class="chnum" style="background:var(--green)">PART 2: STORY INVENTORS</span></div>
+  <span class="chnum">Chapter 9</span>
+  <h2>Pitch Like a Pro: Stories That Sell Ideas 💡</h2>
+  <div class="bubble b"><b>Roary:</b> "Grown-ups who run companies use stories to share ideas, and so can you! A <span class="word">pitch</span> is a short, exciting story that tells people about your invention. Let's learn their secret formula."</div>
+  <h3>The SCQA pitch: four steps</h3>
+  <div class="fig"><svg viewBox="0 0 660 190" width="640" role="img" aria-label="Four boxes: Situation, Complication, Question, Answer, each linked to a story part">
+    <defs><marker id="arw9" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#2b2d42"/></marker></defs>
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"><rect x="5" y="20" width="150" height="100" rx="16" fill="#e8f9ff"/><rect x="175" y="20" width="150" height="100" rx="16" fill="#ffe0ef"/><rect x="345" y="20" width="150" height="100" rx="16" fill="#fff3c4"/><rect x="515" y="20" width="140" height="100" rx="16" fill="#e9fff1"/>
+    <path d="M157 70 H173 M327 70 H343 M497 70 H513" fill="none" marker-end="url(#arw9)"/></g>
+    <g font-size="16" font-weight="bold" text-anchor="middle" fill="#2b2d42"><text x="80" y="50">1. SITUATION</text><text x="250" y="50">2. COMPLICATION</text><text x="420" y="50">3. QUESTION</text><text x="585" y="50">4. ANSWER</text></g>
+    <g font-size="13" text-anchor="middle" fill="#2b2d42"><text x="80" y="78">Meet the</text><text x="80" y="96">customer</text><text x="250" y="78">Uh-oh!</text><text x="250" y="96">A problem!</text><text x="420" y="78">"Wouldn't it</text><text x="420" y="96">be great if…?"</text><text x="585" y="78">Ta-da!</text><text x="585" y="96">The product!</text></g>
+    <g font-size="13" text-anchor="middle" fill="#9b5de5" font-weight="bold"><text x="80" y="150">= Character</text><text x="80" y="168">+ Setting</text><text x="250" y="150">= Problem</text><text x="420" y="150">= What they</text><text x="420" y="168">really want</text><text x="585" y="150">= Action</text><text x="585" y="168">(the fix!)</text></g>
+  </svg></div>
+  <div class="story" style="display:flex;gap:14px;align-items:center">
+    <svg viewBox="0 0 120 120" width="90" style="flex:none"><use href="#bear" x="0" y="0" width="120" height="120"/></svg>
+    <div><b>Situation:</b> Meet Barnaby the Bear. Every morning, Barnaby loves to pick berries in the sunny forest.<br>
+    <b>Complication:</b> Uh-oh! His paws get sticky, and thorns poke his claws every time he reaches the high branches!<br>
+    <b>Question:</b> How can Barnaby pick high berries without getting poked or sticky?<br>
+    <b>Answer:</b> Introducing the <b>Berry-Grabber 3000!</b> A soft, magnetic claw that reaches the high branches with no thorns and no mess!</div>
+  </div>
+  <h3>Two more copywriter tricks</h3>
+  <div class="cols">
+    <div class="fun" style="background:#ffe0ef;border-color:var(--pink)"><b>PAS: Problem, Agitate, Solve</b><br>1. Name the problem. 2. Make it feel REALLY annoying. 3. Show the cure!<br><small>"Shoes keep coming untied! You trip, your friends giggle, you're late! Zip-Laces never come undone."</small></div>
+    <div class="fun" style="background:#e8f9ff;border-color:var(--blue)"><b>BAB: Before, After, Bridge</b><br>Show life <i>before</i>, then <i>after</i>, and say your product is the <i>bridge</i> between them.<br><small>"Before: soggy cereal. After: crunchy forever. Bridge: the Crunch Cup!"</small></div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Pitch practice</h3>
+    <p><b>1. Match each Barnaby line to its SCQA step.</b></p>
+    <div class="match">
+      <div class="l">"Meet Barnaby the Bear in the forest."</div><div class="dot">⟷</div><div class="r">Answer</div>
+      <div class="l">"Thorns poke his claws!"</div><div class="dot">⟷</div><div class="r">Question</div>
+      <div class="l">"How can he reach high berries?"</div><div class="dot">⟷</div><div class="r">Situation</div>
+      <div class="l">"Introducing the Berry-Grabber 3000!"</div><div class="dot">⟷</div><div class="r">Complication</div>
+    </div>
+    <p><b>2. Name the trick:</b> Write PAS or BAB.<br>
+    "Before: I couldn't sleep. After: I dream of dinosaurs. Bridge: the Snooze Pillow." ___<br>
+    "Hiccups! They never stop. You can't even talk! Meet the Hiccup Zapper." ___</p>
+    <p><b>3. Invent a gadget!</b> Pick any object near you (a spoon, a box, a sock) and imagine it's a magical invention. Fill in your SCQA pitch:</p>
+    <table>
+      <tr><th style="width:28%">My object is</th><td></td></tr>
+      <tr><th>Situation: Who is the customer and where are they?</th><td style="height:48px"></td></tr>
+      <tr><th>Complication: What goes wrong?</th><td style="height:48px"></td></tr>
+      <tr><th>Question: "Wouldn't it be great if…?"</th><td style="height:48px"></td></tr>
+      <tr><th>Answer: Introducing the… (name it!)</th><td style="height:48px"></td></tr>
+    </table>
+    <p><b>4. Draw your invention:</b></p>
+    <div class="box" style="min-height:90px"></div>
+  </div>
+</section>
+
+<!-- CH10 ADS -->
+<section class="page">
+  <span class="chnum">Chapter 10</span>
+  <h2>Make an Ad: The 4-Panel Commercial 🎬</h2>
+  <p>Ads are mini-stories! Ad makers use the <span class="word">AIDA</span> recipe. Each letter is one comic panel:</p>
+  <div class="fig"><svg viewBox="0 0 690 270" width="660" role="img" aria-label="Four-panel ad: a dragon with burnt toast, the Flame-Stopper Toast Shield, perfect toast with CRUNCH, and a price tag">
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round">
+      <rect x="5" y="5" width="160" height="190" rx="12" fill="#fff3c4"/><rect x="175" y="5" width="160" height="190" rx="12" fill="#e8f9ff"/><rect x="345" y="5" width="160" height="190" rx="12" fill="#e9fff1"/><rect x="515" y="5" width="170" height="190" rx="12" fill="#ffe0ef"/>
+    </g>
+    <!-- 1 -->
+    <use href="#dino" x="15" y="60" width="100" height="100"/>
+    <g stroke="#2b2d42" stroke-width="3"><rect x="105" y="110" width="45" height="38" rx="6" fill="#2b2d42" transform="rotate(-8 127 129)"/></g>
+    <path d="M118 100 q-6 -14 4 -22 q8 -10 -2 -22 M136 98 q-6 -12 3 -20" fill="none" stroke="#888" stroke-width="4" stroke-linecap="round"/>
+    <text x="85" y="40" font-size="20" font-weight="bold" text-anchor="middle" fill="#c0392b">OH NO!</text>
+    <!-- 2 -->
+    <path d="M220 40 h70 v60 q0 40 -35 60 q-35 -20 -35 -60Z" fill="#c8cdd6" stroke="#2b2d42" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M255 70 q-12 18 0 34 q12 -16 0 -34Z" fill="#ff9f1c" stroke="#2b2d42" stroke-width="3"/>
+    <text x="255" y="185" font-size="13" font-weight="bold" text-anchor="middle" fill="#2b2d42">Flame-Stopper</text>
+    <!-- 3 -->
+    <rect x="395" y="70" width="70" height="62" rx="12" fill="#ffd23f" stroke="#2b2d42" stroke-width="4"/>
+    <use href="#star" x="365" y="40" width="30" height="30"/><use href="#star" x="470" y="45" width="26" height="26"/><use href="#star" x="470" y="125" width="22" height="22"/>
+    <text x="425" y="42" font-size="20" font-weight="bold" text-anchor="middle" fill="#ff6b9d">CRUNCH!</text>
+    <text x="425" y="170" font-size="14" text-anchor="middle" fill="#2b2d42">Warm. Golden. Perfect.</text>
+    <!-- 4 -->
+    <path d="M545 70 h80 l30 30 l-30 30 h-80Z" fill="#fff" stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"/>
+    <text x="600" y="95" font-size="15" font-weight="bold" text-anchor="middle" fill="#2b2d42">2 gold</text><text x="600" y="113" font-size="15" font-weight="bold" text-anchor="middle" fill="#2b2d42">coins!</text>
+    <text x="600" y="170" font-size="14" text-anchor="middle" fill="#2b2d42">Dragon Depot. Try it today!</text>
+    <g font-size="16" font-weight="bold" text-anchor="middle" fill="#fff"><rect x="5" y="215" width="160" height="38" rx="10" fill="#ff9f1c"/><rect x="175" y="215" width="160" height="38" rx="10" fill="#4cc9f0"/><rect x="345" y="215" width="160" height="38" rx="10" fill="#6bd38a"/><rect x="515" y="215" width="170" height="38" rx="10" fill="#ff6b9d"/>
+    <text x="85" y="240">A: ATTENTION</text><text x="255" y="240">I: INTEREST</text><text x="425" y="240">D: DESIRE</text><text x="600" y="240">A: ACTION</text></g>
+  </svg></div>
+  <table>
+    <tr><th>Panel</th><th>What goes in it</th></tr>
+    <tr><td><b>1. Attention</b></td><td>A big, funny, or surprising problem that grabs eyes</td></tr>
+    <tr><td><b>2. Interest</b></td><td>Your product shows up: "The Flame-Stopper Toast Shield!"</td></tr>
+    <tr><td><b>3. Desire</b></td><td>Everything is better! Use sound words and a happy <i>after</i> picture (use contrast: sad and messy <i>before</i>, happy and clean <i>after</i>)</td></tr>
+    <tr><td><b>4. Action</b></td><td>Tell people what to do: "Buy it! Try it! Available at the Dragon Depot!"</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <h3>Jingles: ads you can sing!</h3>
+  <div class="fun">Advertisers make a <b>jingle</b>, a short rhyming slogan that sticks in your head. <i>"Zap the dirt, erase the grime, Clean-o-Bot works every time!"</i> Add sound effects (stomp for a monster, ring a bell for a bright idea), and use pots, spoons, bells and shakers as instruments.</div>
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Be an ad agency!</h3>
+    <p><b>1. What does AIDA stand for?</b> A_________ I_________ D_________ A_________</p>
+    <p><b>2. Match each drawing idea to its panel:</b></p>
+    <div class="match">
+      <div class="l">A happy dragon with perfect toast</div><div class="dot">⟷</div><div class="r">Attention</div>
+      <div class="l">A sign with the price and "Buy today!"</div><div class="dot">⟷</div><div class="r">Desire</div>
+      <div class="l">A dragon crying over burnt toast</div><div class="dot">⟷</div><div class="r">Action</div>
+    </div>
+    <p><b>3. Make your own 4-panel ad</b> for your invention from Chapter 9. Add a sound word in panel 3 and a price in panel 4.</p>
+    <div class="fig"><svg viewBox="0 0 690 200" width="660" role="img" aria-label="Four blank ad panels">
+      <g fill="#fff" stroke="#2b2d42" stroke-width="4" stroke-dasharray="8 6"><rect x="5" y="5" width="160" height="150" rx="12"/><rect x="175" y="5" width="160" height="150" rx="12"/><rect x="345" y="5" width="160" height="150" rx="12"/><rect x="515" y="5" width="170" height="150" rx="12"/></g>
+      <g font-size="14" font-weight="bold" text-anchor="middle" fill="#2b2d42"><text x="85" y="182">Attention</text><text x="255" y="182">Interest</text><text x="425" y="182">Desire</text><text x="600" y="182">Action</text></g>
+    </svg></div>
+    <p><b>4. Slogan time.</b> Finish the rhyme: "Zap the dirt, erase the grime, Clean-o-Bot works every ________!"</p>
+    <p>Now write a 1-sentence rhyming slogan for YOUR product: <span class="blank" style="min-width:75%"></span></p>
+    <p><b>5. Sound design.</b> What 3 sounds will your commercial use? Circle or add: &nbsp; BOING! &nbsp; ding-ding! &nbsp; stomp-stomp! &nbsp; whoosh! &nbsp; _______</p>
+  </div>
+</section>
+
+<!-- CH11 SALES -->
+<section class="page">
+  <span class="chnum">Chapter 11</span>
+  <h2>The Sales Game: Fortunately / Unfortunately 🤝</h2>
+  <p>Real sellers must answer tricky questions from customers. These are called <span class="word">objections</span>. Instead of giving up, great sellers <b>pivot</b>: they find a clever answer! You already know a game for this: <b>Fortunately / Unfortunately</b>.</p>
+  <div class="fig"><svg viewBox="0 0 640 330" width="620" role="img" aria-label="A conversation between Roary the seller and a puppet customer about a smart water bottle">
+    <use href="#dino" x="5" y="120" width="110" height="110"/><use href="#puppet" x="540" y="110" width="80" height="114"/>
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round">
+      <rect x="120" y="5" width="330" height="56" rx="14" fill="#e9fff1"/><rect x="190" y="75" width="340" height="56" rx="14" fill="#ffe0ef"/>
+      <rect x="120" y="145" width="330" height="56" rx="14" fill="#e9fff1"/><rect x="190" y="215" width="340" height="56" rx="14" fill="#ffe0ef"/>
+      <rect x="120" y="285" width="330" height="40" rx="14" fill="#fff3c4"/>
+    </g>
+    <g font-size="13" fill="#2b2d42"><text x="132" y="28">SELLER: "Try this Smart Water Bottle!</text><text x="132" y="47">It tracks how much water you drink!"</text>
+      <text x="202" y="98">CUSTOMER: "Unfortunately, I don't like</text><text x="202" y="117">carrying heavy bottles."</text>
+      <text x="132" y="168">SELLER: "Fortunately, it's made of space foam</text><text x="132" y="187">and squishes flat when empty!"</text>
+      <text x="202" y="238">CUSTOMER: "Unfortunately, space foam</text><text x="202" y="257">sounds expensive!"</text>
+      <text x="132" y="310">SELLER: "Fortunately, it's buy-one-get-one-FREE!"  CUSTOMER: "Deal!"</text></g>
+  </svg></div>
+  <div class="cols">
+    <div class="fun"><b>How to play</b><br>Work in pairs. One is the <b>Seller</b>. The other is the <b>Customer</b> (or use a puppet!). The customer says "Unfortunately…" and the seller answers "Fortunately…". After a few rounds, the customer says "Deal!" and you shake hands.</div>
+    <div class="fun" style="background:#e8f9ff;border-color:var(--blue)"><b>Seller's secret</b><br>Stay friendly, smile, and never argue. Turn every worry into a reason your product is great!</div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Objection busters</h3>
+    <p><b>1. Pivot it!</b> Write a "Fortunately…" answer for each:</p>
+    <p>Customer: "Unfortunately, your Rocket Shoes are too loud!"<br>Seller: "Fortunately, <span class="blank" style="min-width:65%"></span>"</p>
+    <p>Customer: "Unfortunately, I already have a toothbrush!"<br>Seller: "Fortunately, <span class="blank" style="min-width:65%"></span>"</p>
+    <p><b>2. Write a mini-script</b> for your own invention. The customer must object twice!</p>
+    <table>
+      <tr><th style="width:25%">Seller</th><td style="height:44px"></td></tr>
+      <tr><th>Customer: "Unfortunately…"</th><td style="height:44px"></td></tr>
+      <tr><th>Seller: "Fortunately…"</th><td style="height:44px"></td></tr>
+      <tr><th>Customer: "Unfortunately…"</th><td style="height:44px"></td></tr>
+      <tr><th>Seller: "Fortunately…"</th><td style="height:44px"></td></tr>
+      <tr><th>Customer</th><td style="height:34px">"Deal!"</td></tr>
+    </table>
+    <p><b>3. Act it out!</b> Perform your script with a friend, family member, or sock puppet. How did the Customer feel at the end?</p>
+    <div class="box" style="min-height:50px"></div>
+  </div>
+</section>
+
+<!-- CH12 SHOWCASE -->
+<section class="page">
+  <span class="chnum">Chapter 12</span>
+  <h2>The Inventor's Showcase: Your 60-Second Pitch! ⏱️</h2>
+  <p>It's showtime! You'll present your invention to your family, class, or friends, who are your "investors". You only get <b>one minute</b>!</p>
+  <div class="fig"><svg viewBox="0 0 640 190" width="620" role="img" aria-label="Four steps: pull a prop from the bag, find the problem, write the pitch, present in 60 seconds with a stopwatch">
+    <defs><marker id="arw12" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#2b2d42"/></marker></defs>
+    <g stroke="#2b2d42" stroke-width="4" stroke-linejoin="round"><rect x="5" y="15" width="140" height="115" rx="14" fill="#fff3c4"/><rect x="170" y="15" width="140" height="115" rx="14" fill="#ffe0ef"/><rect x="335" y="15" width="140" height="115" rx="14" fill="#e8f9ff"/><rect x="500" y="15" width="135" height="115" rx="14" fill="#e9fff1"/>
+    <path d="M147 72 H168 M312 72 H333 M477 72 H498" fill="none" marker-end="url(#arw12)"/></g>
+    <g font-size="15" font-weight="bold" text-anchor="middle" fill="#2b2d42"><text x="75" y="42">1. PICK A PROP</text><text x="240" y="42">2. FIND THE</text><text x="240" y="60">PROBLEM</text><text x="405" y="42">3. WRITE THE</text><text x="405" y="60">SCQA SCRIPT</text><text x="567" y="42">4. PITCH!</text></g>
+    <g font-size="12" text-anchor="middle" fill="#2b2d42"><text x="75" y="80">Reach into the</text><text x="75" y="96">Mystery Bag</text><text x="240" y="90">Silly or</text><text x="240" y="106">high-stakes?</text><text x="405" y="90">Situation, Uh-oh,</text><text x="405" y="106">Question, Answer</text><text x="567" y="80">60 seconds!</text><text x="567" y="96">Big voice, eye</text><text x="567" y="112">contact, gestures</text></g>
+  </svg></div>
+  <div class="cols">
+    <div class="fun"><b>Pitch tips</b><br>Smile. Look at your audience. Use your biggest voice for the exciting parts and your whisper voice for the secrets. Hold up or show your invention!</div>
+    <div class="fun" style="background:#e8f9ff;border-color:var(--blue)"><b>Mystery Pitch Bag</b><br>Fill a bag with a wooden spoon, an empty box, a key, a toy airplane, a salt shaker… Everyone pulls out one object and re-imagines it as a new invention!</div>
+  </div>
+  <h3>The Investor's Scorecard</h3>
+  <p>Investors, give 2, 3 or 4 stars for each row:</p>
+  <table>
+    <tr><th>Judge it!</th><th>4 stars</th><th>3 stars</th><th>2 stars</th></tr>
+    <tr><td><b>Clear story</b></td><td>Clear problem and clear solution</td><td>Mostly clear</td><td>A bit confusing</td></tr>
+    <tr><td><b>Creative idea</b></td><td>Brand-new and super original!</td><td>Creative but guessable</td><td>Like something we've seen</td></tr>
+    <tr><td><b>Sparkle words</b></td><td>Senses and strong proof</td><td>Good words</td><td>Plain words</td></tr>
+    <tr><td><b>Voice and look</b></td><td>Big energy, eye contact</td><td>Good, a few pauses</td><td>Quiet or shy</td></tr>
+    <tr><td><b>Fix the worry</b></td><td>Answers objections easily</td><td>Answers with a little help</td><td>Gets stuck</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> My pitch plan and score</h3>
+    <table>
+      <tr><th style="width:30%">My invention</th><td></td></tr>
+      <tr><th>My 60-second plan: 10 sec Situation</th><td style="height:36px"></td></tr>
+      <tr><th>15 sec Uh-oh problem</th><td style="height:36px"></td></tr>
+      <tr><th>10 sec Question</th><td style="height:36px"></td></tr>
+      <tr><th>25 sec Answer, show it, call to action!</th><td style="height:36px"></td></tr>
+    </table>
+    <p><b>My scorecard</b> (ask an investor to fill it in): Clear story ___ &nbsp; Creative idea ___ &nbsp; Sparkle words ___ &nbsp; Voice and look ___ &nbsp; Fix the worry ___ &nbsp; Total: ___ / 20</p>
+    <p><b>One thing I did great:</b> <span class="blank" style="min-width:60%"></span></p>
+    <p><b>One thing I will practice:</b> <span class="blank" style="min-width:60%"></span></p>
+  </div>
+  <h3>Your Pitch Week plan</h3>
+  <table>
+    <tr><th>Day</th><th>Mission</th><th>You make</th></tr>
+    <tr><td>1</td><td>Find a need and meet your character</td><td>A hero and a problem</td></tr>
+    <tr><td>2</td><td>Invent your product from a Mystery Bag object</td><td>Your invention</td></tr>
+    <tr><td>3</td><td>Design the ad</td><td>A 4-panel ad and a jingle</td></tr>
+    <tr><td>4</td><td>Practice selling and fixing worries</td><td>An objection script</td></tr>
+    <tr><td>5</td><td>The Inventor's Showcase!</td><td>Your 60-second pitch</td></tr>
+  </table>
+  <div class="fun" style="text-align:center"><b>Showcase awards!</b><br>
+  🏆 Best Hook &nbsp; 🏆 Most Creative Ad &nbsp; 🏆 Master Negotiator &nbsp; 🏆 Best Jingle &nbsp; 🏆 Biggest Voice<br><small>Hand out a certificate to every inventor!</small></div>
+</section>
+
+<!-- RECIPE CARD + FINAL -->
+<section class="page">
+  <h2>📝 My Story Recipe Card</h2>
+  <p>Tape this on your wall! Before you tell any story, check every box:</p>
+  <ul class="check">
+    <li><b>Character:</b> a fun name, an age, 2–3 traits, 1 flaw</li>
+    <li><b>Setting:</b> logical (cozy) or surprising (funny)?</li>
+    <li><b>Problem:</b> helpful, silly, or high-stakes?</li>
+    <li><b>Action:</b> intro → problem → 2 tries → fix → takeaway</li>
+    <li><b>Sparkle:</b> senses, opposites, and talking</li>
+    <li><b>Props:</b> puppet, drawings, or a bag of objects</li>
+    <li><b>Questions:</b> 3 to ask my audience at the end</li>
+    <li><b>Pitch:</b> Situation → Complication → Question → Answer</li>
+    <li><b>Ad:</b> Attention → Interest → Desire → Action</li>
+    <li><b>Sales:</b> answer every "Unfortunately…" with a "Fortunately…"</li>
+  </ul>
+  <div class="ex">
+    <h3><span class="tag">✏️ Your Turn</span> Final spell test</h3>
+    <ol>
+      <li>The four parts of the Magic Recipe are Character, Setting, Problem, and ____________.</li>
+      <li>"Peter the Purple Penguin" is a great name because the words start with the ____________ sound.</li>
+      <li>A salt shaker in a toy box is a ____________ setting.</li>
+      <li>How many times should a hero try before winning? At least ____.</li>
+      <li>Hearing, seeing, smelling, tasting, and touching are the five ____________.</li>
+      <li>True or False: Characters can be toys or food. ______</li>
+      <li>True or False: The hero should always win on the first try. ______</li>
+      <li>SCQA stands for Situation, Complication, ____________, and Answer.</li>
+      <li>AIDA stands for Attention, Interest, Desire, and ____________.</li>
+      <li>When a customer says "Unfortunately…", a smart seller answers "____________…"</li>
+      <li>A short rhyming slogan that is easy to sing is called a ____________.</li>
+    </ol>
+    <p><b>Now it's showtime!</b> Pick your favorite story from this book. Tell it out loud to someone you love, using your best voices and props.</p>
+    <p>My audience: <span class="blank"></span> &nbsp; They laughed at: <span class="blank"></span></p>
+  </div>
+</section>
+
+<!-- CERTIFICATE -->
+<section class="page cert">
+  <h1>🏅 Story Wizard and Inventor Certificate 🏅</h1>
+  <div class="fig"><svg viewBox="0 0 400 200" width="320"><use href="#dino" x="30" y="10" width="150" height="150"/><use href="#salt" x="205" y="20" width="62" height="103"/><use href="#puppet" x="290" y="15" width="80" height="114"/><use href="#star" x="180" y="150" width="40" height="40"/></svg></div>
+  <p style="font-size:1.3rem">This certifies that</p>
+  <p><span class="blank" style="min-width:70%"></span></p>
+  <p style="font-size:1.3rem">can invent a hero, find a setting, make up a problem, climb the story mountain, pitch a brilliant invention, make a 4-panel ad, and win over any customer with a smile!</p>
+  <p>Date: ____________ &nbsp;&nbsp; Signed by Roary the Dinosaur 🦖</p>
+  <p><b>Keep imagining, keep asking "what if?", and keep telling stories!</b></p>
+  <p class="small">Written by Mayank Sharma</p>
+</section>
+
+<!-- ANSWER KEY / GROWN-UPS -->
+<section class="page">
+  <h2>🔑 Answer Key and Note for Grown-ups</h2>
+  <ul class="small">
+    <li><b>Ch.1:</b> Open-ended. Check for an alliterative name, 2–3 traits, and one flaw. Name ideas: Sammy the Squirrel, Dora the Dragon, Marvin the Mouse.</li>
+    <li><b>Ch.2:</b> 1 L · 2 S · 3 S · 4 L · 5 S. The rest is open-ended.</li>
+    <li><b>Ch.3:</b> 1 H · 2 S · 3 HS · 4 H (or S) · 5 S. The rest is open-ended.</li>
+    <li><b>Ch.4:</b> Open-ended. Check that there are two tries and that the first one fails.</li>
+    <li><b>Ch.5:</b> (1) Top to bottom the numbers are 5, 1, 2, 3, 4. (2) Open-ended, as long as each step follows from the one before. (3) B, M, E.</li>
+    <li><b>Ch.6:</b> Opposites: giant–tiny, brave–scared, loud–quiet. The rest is open-ended.</li>
+    <li><b>Ch.8:</b> "What will Rex do next?" = Predict. "Who is Pip?" = Remember. "Have you ever asked a friend for help?" = Connect.</li>
+    <li><b>Ch.9:</b> (1) Meet Barnaby = Situation · Thorns poke = Complication · How can he reach = Question · Introducing the Berry-Grabber 3000 = Answer. (2) First is BAB, second is PAS. (3 and 4) Open-ended. Check that the pitch has a clear customer, a clear problem, and a named product.</li>
+    <li><b>Ch.10:</b> (1) Attention, Interest, Desire, Action. (2) Happy dragon with perfect toast = Desire · Sign with price = Action · Crying dragon = Attention. (4) "…every time!" The rest is open-ended.</li>
+    <li><b>Ch.11:</b> Open-ended. Look for a friendly, clever "Fortunately…" that turns the worry into a benefit. Example: "Fortunately, they have a quiet mode that goes whisper-soft" or "Fortunately, this one lights up so brushing is fun."</li>
+    <li><b>Ch.12:</b> Open-ended. The plan's times add up to 60 seconds (10 + 15 + 10 + 25).</li>
+    <li><b>Final test:</b> 1 Action · 2 same (starting) · 3 surprising · 4 two · 5 senses · 6 True · 7 False · 8 Question · 9 Action · 10 Fortunately · 11 jingle.</li>
+  </ul>
+  <div class="bubble b"><b>For parents and teachers:</b> This book follows a simple framework: Character, Setting, Problem and Action, built on a clear beginning, middle and end, with cause and effect between events. Children learn the most when stories are interactive, so use the games, puppets, drawing and questions in the book. Ask open-ended questions (prediction, feelings, connecting to their life) and let your child lead. Praise effort and imagination, not perfection.<br><br>Part 2 adapts business-school communication models for children: the SCQA pitch (Situation, Complication, Question, Answer), the AIDA advertising model (Attention, Interest, Desire, Action), and the PAS and BAB copywriting formats. The "Fortunately / Unfortunately" game doubles as practice for answering objections. For a full week, follow the Pitch Week plan (one chapter-activity per day) and finish with the Inventor's Showcase, using the scorecard as encouraging feedback. Everything uses simple materials: paper, props, puppets, and household objects.</div>
+</section>
+
+<!-- ABOUT THE AUTHOR -->
+<section class="page">
+  <h2>✍️ About the Author</h2>
+  <div class="fig"><svg viewBox="0 0 400 200" width="300" aria-hidden="true"><use href="#dino" x="150" y="10" width="110" height="110"/><use href="#star" x="60" y="40" width="46" height="46"/><use href="#star" x="300" y="60" width="38" height="38"/><use href="#book" x="140" y="125" width="130" height="70"/></svg></div>
+  <p><b>Mayank Sharma</b> is a cybersecurity professional, author, and lifelong learner who believes that some of life’s biggest lessons can be understood through simple stories.</p>
+  <p>As a father, Mayank is especially inspired by the curiosity of children and the wonderful questions they ask about life, emotions, friendships, courage, and growing up. Through his children’s books, he hopes to turn thoughtful ideas into stories that young readers can enjoy, understand, and carry with them as they grow.</p>
+  <p>When he isn’t working with technology or writing, Mayank enjoys exploring new ideas, learning from everyday experiences, and sharing meaningful conversations with his family.</p>
+  <div class="fun" style="text-align:center">
+    <b>His wish for every young reader is simple:</b><br>
+    <span style="font-size:1.3rem">Stay curious. Be kind. Believe in yourself. And never stop learning. 🌟</span>
+  </div>
+</section>
+
+</body>
+</html>
