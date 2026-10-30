@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Feelings Explorers</title><style>
+:root{
+  --ink:#2b2d42; --page:#ffffff;
+  --pink:#ff6b9d; --blue:#4cc9f0; --yellow:#ffd23f; --green:#6bd38a; --purple:#9b5de5; --orange:#ff9f1c; --red:#e63946;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#ffe8c7;color:var(--ink);font-family:"Chalkboard SE","Comic Sans MS","Marker Felt","Trebuchet MS",sans-serif;font-size:18px;line-height:1.55}
+.page{max-width:820px;margin:24px auto;background:var(--page);border:6px solid var(--ink);border-radius:28px;padding:36px 40px;box-shadow:8px 8px 0 rgba(43,45,66,.25);break-after:page;page-break-after:always}
+h1,h2,h3{line-height:1.15;margin:.2em 0 .4em}
+h1{font-size:2.6rem}
+h2{font-size:2rem;color:var(--purple)}
+h3{font-size:1.3rem;color:var(--pink)}
+.chnum{display:inline-block;background:var(--yellow);border:4px solid var(--ink);border-radius:999px;padding:2px 18px;font-size:1rem;font-weight:bold;transform:rotate(-3deg)}
+.fig{text-align:center;margin:14px 0}
+.fig svg{max-width:100%;height:auto}
+.pies{display:flex;flex-wrap:wrap;gap:14px 22px;justify-content:center;margin:10px 0}
+.pies figure{margin:0;text-align:center}
+.pies figcaption{font-weight:bold;font-size:.95rem}
+.bubble{background:#e8f9ff;border:4px solid var(--blue);border-radius:22px;padding:12px 18px;margin:14px 0;position:relative}
+.bubble.b{margin-left:70px}
+.bubble.b::before{content:"";position:absolute;left:-26px;top:20px;border:12px solid transparent;border-right:16px solid var(--blue)}
+.fun{background:#fff3c4;border:4px dashed var(--orange);border-radius:18px;padding:12px 18px;margin:16px 0}
+.rule{background:#e9fff1;border:5px solid var(--green);border-radius:18px;padding:10px 18px;margin:16px 0}
+.word{background:var(--yellow);padding:0 8px;border-radius:8px;font-weight:bold}
+.ex{background:#f3eaff;border:5px solid var(--purple);border-radius:24px;padding:16px 22px;margin:22px 0}
+.ex h3{color:var(--purple);margin-top:0}
+.tag{display:inline-block;background:var(--purple);color:#fff;border-radius:999px;padding:0 14px;font-size:.85rem;margin-right:6px}
+.blank{display:inline-block;min-width:60px;border-bottom:3px solid var(--ink)}
+.box{border:3px dashed var(--ink);border-radius:14px;min-height:100px;padding:6px 10px;background:#fff;margin:8px 0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.match{display:grid;grid-template-columns:1fr 60px 1fr;gap:8px 0;align-items:center}
+.match .l,.match .r{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px 12px;text-align:center}
+.match .dot{text-align:center;font-size:1.4rem}
+table{border-collapse:collapse;width:100%;background:#fff}
+th,td{border:3px solid var(--ink);padding:6px 10px;text-align:left;vertical-align:middle}
+th{background:var(--yellow)}
+ul.check{list-style:none;padding-left:0}
+ul.check li::before{content:"☐ ";font-size:1.2em}
+li{margin:4px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 3px;font-weight:bold}
+.fr>span:first-child{border-bottom:2.5px solid currentColor;padding:0 5px 1px}
+.fr>span:last-child{padding:1px 5px 0}
+.mx{font-weight:bold;font-size:1.25em;vertical-align:middle;margin-right:1px}
+.eq{font-size:1.15em}
+.cover{text-align:center;background:linear-gradient(160deg,#fff3c4,#ffe0ef 55%,#d6f0ff)}
+.cover h1{font-size:3rem;color:var(--purple);text-shadow:3px 3px 0 var(--yellow)}
+.cover p.sub{font-size:1.25rem}
+.cert{text-align:center;border-style:double;border-width:14px;background:#fffdf0}
+.small{font-size:.9rem}
+.toolbar{max-width:820px;margin:16px auto 0;text-align:right;padding:0 8px}
+.toolbar button{font:inherit;background:var(--green);border:4px solid var(--ink);border-radius:999px;padding:6px 20px;cursor:pointer}
+@media (max-width:640px){
+  .page{margin:12px 8px;padding:22px 18px;border-width:4px}
+  .cols,.cols3{grid-template-columns:1fr}
+  h1{font-size:2rem}.cover h1{font-size:2.2rem}
+  .bubble.b{margin-left:0}.bubble.b::before{display:none}
+}
+@page{size:A4 portrait;margin:10mm}
+@media print{
+  html,body{background:#fff;font-size:12.5px;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .toolbar{display:none}
+  .page{box-shadow:none;margin:0;border-radius:14px;max-width:none;width:100%;border-width:3px;padding:12px 16px}
+  .page:last-of-type{break-after:auto;page-break-after:auto}
+  h1{font-size:2rem}.cover h1{font-size:2.4rem}
+  h2{font-size:1.5rem;margin:.1em 0 .3em}
+  h3{font-size:1.1rem;margin:.2em 0 .3em}
+  .fig{margin:6px 0}
+  .fig svg{max-height:60mm;width:auto;max-width:100%}
+  .cover .fig svg{max-height:110mm}
+  .pies svg{width:70px;height:70px}
+  .fun,.ex,.bubble,.rule{padding:8px 12px;margin:8px 0;border-width:3px}
+  .box{min-height:60px}
+  .fun,.ex,.bubble,.rule,.fig,table,tr,.match,.pies figure,.cols>div,.cols3>div,li{break-inside:avoid;page-break-inside:avoid}
+  h2,h3{break-after:avoid}
+}
+
+.fam{display:flex;gap:12px;align-items:center;background:#fff;border:4px solid var(--ink);border-radius:18px;padding:6px 12px;margin:8px 0}
+.fam .ff{flex:0 0 auto}
+.words span{display:inline-block;background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:0 10px;margin:2px;font-size:.9rem;font-weight:bold}
+.small{font-size:.9rem}
+.big{font-size:1.15em}
+@media print{.fam{padding:3px 10px;margin:4px 0;border-width:3px}.fam svg{width:64px;height:64px}.fam,.words{break-inside:avoid}}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="f-joy" viewBox="0 0 120 120"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="54" fill="#ffd23f"/><path d="M32 46 q8 -10 16 0 M72 46 q8 -10 16 0" fill="none"/><path d="M34 70 q26 30 52 0Z" fill="#fff"/></g></symbol>
+<symbol id="f-anger" viewBox="0 0 120 120"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="54" fill="#ff7b7b"/><path d="M28 34 L52 46 M92 34 L68 46" fill="none" stroke-width="6"/><circle cx="42" cy="54" r="5" fill="#2b2d42"/><circle cx="78" cy="54" r="5" fill="#2b2d42"/><path d="M38 84 q22 -18 44 0" fill="none"/></g></symbol>
+<symbol id="f-sad" viewBox="0 0 120 120"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="54" fill="#8ec5ff"/><path d="M28 42 L50 34 M92 42 L70 34" fill="none"/><circle cx="42" cy="54" r="5" fill="#2b2d42"/><circle cx="78" cy="54" r="5" fill="#2b2d42"/><path d="M40 84 q20 -16 40 0" fill="none"/><path d="M42 64 q-6 12 0 16 q6 -4 0 -16Z" fill="#4cc9f0" stroke-width="2.5"/></g></symbol>
+<symbol id="f-fear" viewBox="0 0 120 120"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="54" fill="#ffb86b"/><circle cx="42" cy="50" r="11" fill="#fff"/><circle cx="78" cy="50" r="11" fill="#fff"/><circle cx="42" cy="52" r="4" fill="#2b2d42"/><circle cx="78" cy="52" r="4" fill="#2b2d42"/><path d="M38 82 q5 -6 11 0 t11 0 t11 0" fill="none"/><path d="M100 28 q-8 14 0 18 q8 -4 0 -18Z" fill="#4cc9f0" stroke-width="2.5"/></g></symbol>
+<symbol id="f-surprise" viewBox="0 0 120 120"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="54" fill="#c4a1ff"/><circle cx="42" cy="50" r="11" fill="#fff"/><circle cx="78" cy="50" r="11" fill="#fff"/><circle cx="42" cy="50" r="4" fill="#2b2d42"/><circle cx="78" cy="50" r="4" fill="#2b2d42"/><path d="M30 28 q12 -10 24 0 M66 28 q12 -10 24 0" fill="none"/><ellipse cx="60" cy="84" rx="9" ry="12" fill="#7a1f3d"/></g></symbol>
+<symbol id="f-disgust" viewBox="0 0 120 120"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="54" fill="#9be39b"/><path d="M30 46 q12 -8 22 2 M68 48 q10 -10 22 -2" fill="none"/><path d="M36 82 q8 -8 16 0 t16 0 t16 0" fill="none"/><path d="M68 90 q8 14 14 4" fill="#ff6b9d"/></g></symbol>
+<symbol id="f-calm" viewBox="0 0 120 120"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="60" r="54" fill="#b7f0d1"/><path d="M32 50 q8 6 16 0 M72 50 q8 6 16 0" fill="none"/><path d="M44 80 q16 12 32 0" fill="none"/></g></symbol>
+<symbol id="amy" viewBox="0 0 170 190"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M85 14 l-4 -10 M60 24 l-14 -12 M110 24 l14 -12" fill="none"/>
+      <path d="M50 70 Q50 22 85 22 Q120 22 120 70Z" fill="#e63946"/>
+      <rect x="36" y="70" width="98" height="16" rx="8" fill="#ffd23f"/>
+      <ellipse cx="85" cy="130" rx="50" ry="48" fill="#ff7b7b"/>
+      <circle cx="66" cy="118" r="12" fill="#fff"/><circle cx="104" cy="118" r="12" fill="#fff"/>
+      <circle cx="66" cy="120" r="4" fill="#2b2d42"/><circle cx="104" cy="120" r="4" fill="#2b2d42"/>
+      <ellipse cx="85" cy="152" rx="13" ry="11" fill="#7a1f3d"/>
+      <path d="M142 80 q10 8 0 18 M152 74 q16 14 0 30" fill="none" stroke="#e63946"/>
+      <path d="M28 80 q-10 8 0 18 M18 74 q-16 14 0 30" fill="none" stroke="#e63946"/>
+    </g></symbol>
+<symbol id="pete" viewBox="0 0 170 200"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 70 L38 30 L66 56 Q85 48 104 56 L132 30 L140 70 Q150 150 85 186 Q20 150 30 70Z" fill="#a9743c"/>
+      <ellipse cx="85" cy="130" rx="38" ry="44" fill="#f6dfb3"/>
+      <circle cx="62" cy="84" r="22" fill="#fff"/><circle cx="108" cy="84" r="22" fill="#fff"/>
+      <circle cx="62" cy="86" r="8" fill="#2b2d42" stroke="none"/><circle cx="108" cy="86" r="8" fill="#2b2d42" stroke="none"/>
+      <path d="M40 84 L30 84 M130 84 L140 84 M84 84 L86 84" fill="none"/>
+      <path d="M76 102 L94 102 L85 118Z" fill="#ff9f1c"/>
+      <path d="M62 142 q23 14 46 0" fill="none" stroke-width="3"/>
+      <path d="M30 120 q-18 20 6 40 M140 120 q18 20 -6 40" fill="none"/>
+      <path d="M68 168 l-6 22 M102 168 l6 22" fill="none"/>
+    </g></symbol>
+<symbol id="body" viewBox="0 0 200 360"><g stroke="#2b2d42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="#fff">
+      <circle cx="100" cy="46" r="38"/>
+      <path d="M66 94 Q100 84 134 94 L146 210 L54 210Z"/>
+      <path d="M66 98 Q30 130 36 200 M134 98 Q170 130 164 200" fill="none" stroke-width="26"/>
+      <path d="M66 98 Q30 130 36 200 M134 98 Q170 130 164 200" fill="none" stroke="#fff" stroke-width="16"/>
+      <path d="M82 210 L76 340 M118 210 L124 340" fill="none" stroke-width="34"/>
+      <path d="M82 210 L76 340 M118 210 L124 340" fill="none" stroke="#fff" stroke-width="24"/>
+    </g></symbol>
+<symbol id="star" viewBox="0 0 50 50"><path d="M25 3 L31 19 L48 19 L34 29 L40 46 L25 36 L10 46 L16 29 L2 19 L19 19Z" fill="#ffd23f" stroke="#2b2d42" stroke-width="3" stroke-linejoin="round"/></symbol></defs></svg>
+<div class="toolbar"><button onclick="window.print()">🖨️ Print my book</button></div>
+<!-- COVER -->
+<section class="page cover">
+  <div class="fig"><svg viewBox="0 0 560 330" width="540" role="img" aria-label="Pete the owl, Amy the alarm and six feeling faces">
+    <circle cx="280" cy="170" r="150" fill="#fff" opacity=".6"/>
+    <use href="#star" x="20" y="20" width="50" height="50"/><use href="#star" x="500" y="30" width="44" height="44"/>
+    <g transform="translate(120 40)"><use href="#pete" width="150" height="176"/></g>
+    <g transform="translate(300 52)"><use href="#amy" width="150" height="167"/></g>
+    <g transform="translate(40 236)"><use href="#f-joy" width="70" height="70"/></g>
+    <g transform="translate(130 246)"><use href="#f-anger" width="70" height="70"/></g>
+    <g transform="translate(220 250)"><use href="#f-sad" width="70" height="70"/></g>
+    <g transform="translate(310 250)"><use href="#f-fear" width="70" height="70"/></g>
+    <g transform="translate(400 246)"><use href="#f-surprise" width="70" height="70"/></g>
+    <g transform="translate(490 236)"><use href="#f-disgust" width="64" height="64"/></g>
+  </svg></div>
+  <h1>Feelings Explorers</h1>
+  <p class="sub">Learn the names of your feelings and what to do with them!</p>
+  <p style="font-size:1.2rem"><b>Written by: Mayank Sharma</b></p>
+  <p>Brain buddies • Body clues • Calm-down tools • Games</p>
+</section>
+
+<!-- WELCOME -->
+<section class="page">
+  <h2>Welcome, Explorer! 🧭</h2>
+  <div class="fig"><svg viewBox="0 0 170 200" width="130" height="153" aria-hidden="true"><use href="#pete"/></svg> &nbsp; <svg viewBox="0 0 170 190" width="120" height="134" aria-hidden="true"><use href="#amy"/></svg></div>
+  <div class="bubble b big"><b>Pete the Owl says:</b> "Hi! I'm <b>Pete</b>, the thinking part of your brain. This is <b>Amy</b>, the alarm part. Amy is fast and loud. She wants to keep you safe!"</div>
+  <div class="rule big">All feelings are <b>okay</b>. Feelings are like messages from your body. What we <b>do</b> with a feeling is what we learn in this book.</div>
+  <h3>Our 6 missions</h3>
+  <ol class="big" style="line-height:1.8">
+    <li>Name it to tame it</li>
+    <li>Body Radar</li>
+    <li>Feeling Families</li>
+    <li>Mixed Feelings</li>
+    <li>Calming the Storm</li>
+    <li>Thought Clouds</li>
+  </ol>
+</section>
+
+<!-- M1 -->
+<section class="page">
+  <span class="chnum">Mission 1</span>
+  <h2>Name It to Tame It 🦉</h2>
+  <div class="cols">
+    <div class="bubble big"><svg viewBox="0 0 170 190" width="90" height="101" aria-hidden="true"><use href="#amy"/></svg><br><b>Amy</b> sounds the alarm when she feels danger: <i>"Fight! Run! Freeze!"</i> When Amy is loud, it is hard to think.</div>
+    <div class="bubble big"><svg viewBox="0 0 170 200" width="90" height="106" aria-hidden="true"><use href="#pete"/></svg><br><b>Pete</b> is wise. He thinks, plans and solves problems. He wakes up when you <b>say the word</b> for your feeling.</div>
+  </div>
+  <div class="rule big"><b>Name it to tame it!</b> When you say the exact word, like <i>"I feel disappointed,"</i> Amy gets quieter and Pete can help. Scientists have found that putting feelings into words can make big feelings a bit smaller.</div>
+  <div class="fun big"><h3>🎮 Game: The One-Word Circle</h3>Sit in a circle with family or friends. Each person says <b>one word</b> for how they feel today, like <i>"Proud"</i>, <i>"Tired"</i> or <i>"Hopeful"</i>.
+    <ol><li>You do <b>not</b> have to say why.</li><li>Nobody fixes, judges or asks questions.</li><li>You may pass.</li></ol></div>
+</section>
+
+<section class="page">
+  <span class="chnum">Mission 1</span>
+  <h2>Your Turn ✏️</h2>
+  <div class="ex big">
+    <h3>1. Pick the better word</h3>
+    <p>Circle the word that tells Pete <b>more</b>.</p>
+    <p>Your tower fell down: <b>bad</b> &nbsp;or&nbsp; <b>frustrated</b></p>
+    <p>You start at a new school: <b>fine</b> &nbsp;or&nbsp; <b>nervous</b></p>
+    <p>You get a surprise present: <b>good</b> &nbsp;or&nbsp; <b>delighted</b></p>
+  </div>
+  <div class="ex big">
+    <h3>2. My one word today</h3>
+    <p>Today I feel <span class="blank" style="min-width:200px"></span>.</p>
+    <p>Draw a face that shows it:</p>
+    <div class="box" style="min-height:110px"></div>
+  </div>
+  <div class="ex big">
+    <h3>3. Say it out loud</h3>
+    <p>Finish: "I feel <span class="blank" style="min-width:120px"></span> when <span class="blank" style="min-width:200px"></span>."</p>
+  </div>
+</section>
+
+<!-- M2 -->
+<section class="page">
+  <span class="chnum">Mission 2</span>
+  <h2>Your Body Radar 📡</h2>
+  <p class="big">Your body gives you clues <b>before</b> you know the word. Where does your body feel it?</p>
+  <div class="cols" style="align-items:center">
+    <div class="fig"><svg viewBox="0 0 300 380" width="230" role="img" aria-label="A body with colored clues for anger, fear, sadness, joy and disgust">
+      <g transform="translate(50 10)"><use href="#body" width="200" height="360"/></g>
+      <g stroke="#2b2d42" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+        <path id="bolt" d="M0 0 l12 20 l-9 0 l12 24 l-26 -28 l10 0Z" fill="#e63946" transform="translate(142 16) scale(.9)"/>
+        <path d="M0 0 l12 20 l-9 0 l12 24 l-26 -28 l10 0Z" fill="#e63946" transform="translate(70 196) scale(.9)"/>
+        <path d="M0 0 l12 20 l-9 0 l12 24 l-26 -28 l10 0Z" fill="#e63946" transform="translate(236 196) scale(.9)"/>
+        <path d="M122 122 l9 -9 l9 9 l9 -9 l9 9 l9 -9 l9 9" fill="none" stroke="#ffb100" stroke-width="6"/>
+        <path d="M134 68 q-8 14 0 18 q8 -4 0 -18Z" fill="#4cc9f0"/><path d="M166 68 q-8 14 0 18 q8 -4 0 -18Z" fill="#4cc9f0"/>
+        <path d="M122 190 q7 -12 14 0 t14 0 t14 0" fill="none" stroke="#2ca02c" stroke-width="7"/>
+        <path d="M150 140 l7 14 l15 2 l-11 11 l3 15 l-14 -8 l-14 8 l3 -15 l-11 -11 l15 -2Z" fill="#ffd23f"/>
+      </g></svg></div>
+    <table class="small">
+      <tr><th>Feeling</th><th>Body clue</th></tr>
+      <tr><td><svg viewBox="0 0 120 120" width="34" height="34" role="img" aria-label="anger face"><use href="#f-anger"/></svg> Angry</td><td>fists, hot cheeks</td></tr>
+      <tr><td><svg viewBox="0 0 120 120" width="34" height="34" role="img" aria-label="fear face"><use href="#f-fear"/></svg> Scared</td><td>fast heart, sweaty hands</td></tr>
+      <tr><td><svg viewBox="0 0 120 120" width="34" height="34" role="img" aria-label="sad face"><use href="#f-sad"/></svg> Sad</td><td>heavy arms, lump in throat, tears</td></tr>
+      <tr><td><svg viewBox="0 0 120 120" width="34" height="34" role="img" aria-label="joy face"><use href="#f-joy"/></svg> Happy</td><td>warm chest, bouncy legs</td></tr>
+      <tr><td><svg viewBox="0 0 120 120" width="34" height="34" role="img" aria-label="disgust face"><use href="#f-disgust"/></svg> Yuck</td><td>wrinkled nose, queasy tummy</td></tr>
+    </table>
+  </div>
+  <h3>The Feelings Meter</h3>
+  <div class="fig"><svg viewBox="0 0 700 150" width="660" role="img" aria-label="Feelings meter from 0 to 10">
+<g stroke="#2b2d42" stroke-width="4">
+<rect x="20" y="40" width="228" height="50" fill="#8ec5ff"/><rect x="248" y="40" width="173" height="50" fill="#ffd23f"/><rect x="421" y="40" width="260" height="50" fill="#ff7b7b"/></g>
+<g font-weight="bold" font-size="20" text-anchor="middle" fill="#2b2d42">
+<text x="40" y="118">0</text><text x="98" y="118">1</text><text x="156" y="118">2</text><text x="214" y="118">3</text><text x="273" y="118">4</text><text x="335" y="118">5</text><text x="397" y="118">6</text><text x="460" y="118">7</text><text x="525" y="118">8</text><text x="590" y="118">9</text><text x="655" y="118">10</text></g>
+<g font-weight="bold" font-size="18" text-anchor="middle" fill="#2b2d42"><text x="134" y="72">Calm Waters</text><text x="335" y="72">Rising Waves</text><text x="550" y="72">Storm Surge</text></g>
+</svg></div>
+  <div class="bubble big"><b>Pete says:</b> "At <b>0–3</b> you are calm. At <b>4–6</b> the waves are rising: use a calming tool <b>now</b>. At <b>7–10</b> it is a storm. Stop, breathe and get help if you need it."</div>
+</section>
+
+<section class="page">
+  <span class="chnum">Mission 2</span>
+  <h2>Your Turn ✏️</h2>
+  <div class="ex big">
+    <h3>1. Color my Body Radar</h3>
+    <p>Pick a feeling. Color where it lives in the body. Use red for anger, yellow for fear, blue for sad, gold for happy, green for yuck.</p>
+    <div class="cols">
+      <div class="fig"><svg viewBox="0 0 200 360" width="150"><use href="#body"/></svg><br>I feel: <span class="blank" style="min-width:90px"></span></div>
+      <div class="fig"><svg viewBox="0 0 200 360" width="150"><use href="#body"/></svg><br>I feel: <span class="blank" style="min-width:90px"></span></div>
+    </div>
+  </div>
+  <div class="ex big">
+    <h3>2. Rate it from 0 to 10</h3>
+    <p>How big is the feeling? Write a number.</p>
+    <ul style="line-height:1.9">
+      <li>Someone borrows your pencil without asking. <span class="blank" style="min-width:50px"></span></li>
+      <li>You drop your ice cream on the ground. <span class="blank" style="min-width:50px"></span></li>
+      <li>You hear a very loud thunder at night. <span class="blank" style="min-width:50px"></span></li>
+    </ul>
+    <p class="small">There are no wrong numbers. Your friend might pick a different one.</p>
+  </div>
+</section>
+
+<!-- M3 -->
+<section class="page">
+  <span class="chnum">Mission 3</span>
+  <h2>The Six Feeling Families 🎨</h2>
+  <p class="big">An artist with only 3 paints can't paint much. With more colors, the picture comes alive. <b>More feeling words</b> means Pete understands you better!</p>
+  <div class="fam"><div class="ff"><svg viewBox="0 0 120 120" width="76" height="76" role="img" aria-label="joy face"><use href="#f-joy"/></svg></div><div><b>Happy family</b><div class="words"><span>content</span><span>peaceful</span><span>grateful</span><span>proud</span><span>excited</span></div></div></div>
+  <div class="fam"><div class="ff"><svg viewBox="0 0 120 120" width="76" height="76" role="img" aria-label="anger face"><use href="#f-anger"/></svg></div><div><b>Mad family</b><div class="words"><span>annoyed</span><span>irritated</span><span>frustrated</span><span>furious</span></div></div></div>
+  <div class="fam"><div class="ff"><svg viewBox="0 0 120 120" width="76" height="76" role="img" aria-label="sad face"><use href="#f-sad"/></svg></div><div><b>Sad family</b><div class="words"><span>disappointed</span><span>discouraged</span><span>lonely</span><span>left out</span></div></div></div>
+  <div class="fam"><div class="ff"><svg viewBox="0 0 120 120" width="76" height="76" role="img" aria-label="fear face"><use href="#f-fear"/></svg></div><div><b>Scared family</b><div class="words"><span>uneasy</span><span>nervous</span><span>worried</span><span>overwhelmed</span></div></div></div>
+  <div class="fam"><div class="ff"><svg viewBox="0 0 120 120" width="76" height="76" role="img" aria-label="surprise face"><use href="#f-surprise"/></svg></div><div><b>Surprise family</b><div class="words"><span>startled</span><span>amazed</span><span>confused</span><span>caught off guard</span></div></div></div>
+  <div class="fam"><div class="ff"><svg viewBox="0 0 120 120" width="76" height="76" role="img" aria-label="disgust face"><use href="#f-disgust"/></svg></div><div><b>Yuck family</b><div class="words"><span>grossed out</span><span>disgusted</span><span>can't stand it</span></div></div></div>
+</section>
+
+<section class="page">
+  <span class="chnum">Mission 3</span>
+  <h2>Your Turn ✏️</h2>
+  <div class="fun big"><b>🎭 Game: Feeling Charades.</b> Pick a feeling word. Act it out with your face and body, <b>no talking!</b> Others guess the family, then think of 3 more words in that family.</div>
+  <div class="ex big">
+    <h3>1. Match the word</h3>
+    <div class="match">
+      <div class="l">You miss a friend who moved away</div><div class="dot">○ ─ ○</div><div class="r">lonely</div>
+      <div class="l">You can't open a jar, and you try again and again</div><div class="dot">○ ─ ○</div><div class="r">frustrated</div>
+      <div class="l">You hear a loud BANG nearby</div><div class="dot">○ ─ ○</div><div class="r">startled</div>
+      <div class="l">You won a game and your team cheers</div><div class="dot">○ ─ ○</div><div class="r">proud</div>
+    </div>
+  </div>
+  <div class="ex big">
+    <h3>2. Find a better word for "bad"</h3>
+    <p>Your friend has to play with someone else at recess. Which family? <span class="blank" style="min-width:110px"></span></p>
+    <p>Write 3 better words: <span class="blank" style="min-width:110px"></span> <span class="blank" style="min-width:110px"></span> <span class="blank" style="min-width:110px"></span></p>
+  </div>
+  <div class="ex big">
+    <h3>3. Make a new word card</h3>
+    <p>Pick any word from this chapter. Draw a face, an action or a color for it.</p>
+    <div class="box" style="min-height:100px"></div>
+  </div>
+</section>
+
+<!-- M4 -->
+<section class="page">
+  <span class="chnum">Mission 4</span>
+  <h2>Mixed Feelings 🥤</h2>
+  <div class="cols" style="align-items:center">
+    <div class="fig"><svg viewBox="0 0 200 240" width="170" role="img" aria-label="A smoothie cup with layers of mixed feelings">
+<path d="M40 30 L160 30 L146 220 Q100 232 54 220Z" fill="#fff" stroke="#2b2d42" stroke-width="5" stroke-linejoin="round"/>
+<path d="M45 90 L155 90 L146 220 Q100 232 54 220Z" fill="#ffd23f"/><path d="M50 160 L150 160 L146 220 Q100 232 54 220Z" fill="#8ec5ff"/>
+<path d="M44 90 L156 90 L152 160 L48 160Z" fill="#ffb86b"/>
+<path d="M40 30 L160 30 L146 220 Q100 232 54 220Z" fill="none" stroke="#2b2d42" stroke-width="5" stroke-linejoin="round"/>
+<path d="M120 30 L140 -4" stroke="#e63946" stroke-width="8" stroke-linecap="round"/>
+<g font-size="14" font-weight="bold" fill="#2b2d42" text-anchor="middle"><text x="100" y="64">excited</text><text x="100" y="130">nervous</text><text x="100" y="200">sad</text></g></svg></div>
+    <div>
+      <div class="bubble big"><b>Pete says:</b> "You can feel two feelings at the same time! On the first day at a new school you might feel <b>excited</b> AND <b>nervous</b>. It's like sweet-and-sour candy."</div>
+      <div class="rule big">Use <b>and</b>, not <b>or</b>:<br><i>"I feel sad about leaving my room, <b>and</b> excited to make new friends."</i></div>
+    </div>
+  </div>
+  <div class="fun big"><h3>🥤 Mixed Feelings Smoothie</h3>Moving to a new home. Imagine the mix: <b>a lot of excited</b> (yellow), <b>some nervous</b> (orange), <b>a little sad</b> (blue). All three are real, and all three are okay.</div>
+</section>
+
+<section class="page">
+  <span class="chnum">Mission 4</span>
+  <h2>Your Turn ✏️</h2>
+  <div class="ex big">
+    <h3>1. Make a smoothie</h3>
+    <p>Your best friend invites you to a sleepover, but you have never slept away from home. Color the cup and name the layers.</p>
+    <div class="cols"><div class="box" style="min-height:130px"></div><div>
+      <p>Layer 1: <span class="blank" style="min-width:120px"></span></p>
+      <p>Layer 2: <span class="blank" style="min-width:120px"></span></p>
+      <p>Layer 3: <span class="blank" style="min-width:120px"></span></p></div></div>
+  </div>
+  <div class="ex big">
+    <h3>2. Be a feelings detective: Leo and Maya</h3>
+    <p>Leo is building with a toy. Maya wants to join in. Leo clenches his fists. Maya smiles and bounces.</p>
+    <table class="small">
+      <tr><th></th><th>Leo</th><th>Maya</th></tr>
+      <tr><td>Body clues</td><td>fists, frown</td><td>smile, bouncy</td></tr>
+      <tr><td>Feeling word</td><td><span class="blank" style="min-width:90px"></span></td><td><span class="blank" style="min-width:90px"></span></td></tr>
+    </table>
+    <p>What could Leo say so that both feelings are heard? <span class="blank" style="min-width:90%"></span></p>
+  </div>
+</section>
+
+<!-- M5 -->
+<section class="page">
+  <span class="chnum">Mission 5</span>
+  <h2>Calming the Storm 🌊</h2>
+  <p class="big">When a feeling reaches 7 or more, thinking gets hard. You can't argue the storm away, but you <b>can</b> breathe it down.</p>
+  <h3>Belly Breathing: 4 in, 5 out</h3>
+  <div class="fig"><svg viewBox="0 0 560 200" width="560" role="img" aria-label="Smell the cookie for 4, blow out the candle for 5">
+<rect width="560" height="200" rx="16" fill="#e8f9ff"/>
+<circle cx="110" cy="100" r="56" fill="#d9a05b" stroke="#2b2d42" stroke-width="5"/><circle cx="90" cy="82" r="8" fill="#5c3b1e"/><circle cx="125" cy="110" r="8" fill="#5c3b1e"/><circle cx="96" cy="124" r="7" fill="#5c3b1e"/><circle cx="132" cy="76" r="7" fill="#5c3b1e"/>
+<path d="M60 28 q10 -14 0 -24 M110 24 q10 -14 0 -24 M160 28 q10 -14 0 -24" fill="none" stroke="#2b2d42" stroke-width="3"/>
+<text x="110" y="188" font-size="19" font-weight="bold" text-anchor="middle" fill="#2b2d42">SMELL the cookie: 4</text>
+<rect x="400" y="80" width="30" height="80" fill="#ff9ec7" stroke="#2b2d42" stroke-width="5"/><path d="M415 78 q-16 -22 0 -38 q16 16 0 38Z" fill="#ffd23f" stroke="#2b2d42" stroke-width="4"/>
+<path d="M330 96 q24 -6 50 0 M334 110 q22 -4 44 0" stroke="#2b2d42" stroke-width="4" fill="none" stroke-linecap="round"/>
+<text x="400" y="188" font-size="19" font-weight="bold" text-anchor="middle" fill="#2b2d42">BLOW the candle: 5</text></svg></div>
+  <div class="rule big">Put a hand on your belly. <b>Smell the cookie</b> slowly (count 4). <b>Blow out the candle</b> even more slowly (count 5). Do it <b>4 times</b>. A long, slow breath out helps your body settle down.</div>
+  <h3>My 5-Senses Calm Box</h3>
+  <table class="small">
+    <tr><th>Sense</th><th>Ideas</th></tr>
+    <tr><td>👀 See</td><td>a favorite picture, a glitter jar</td></tr>
+    <tr><td>👂 Hear</td><td>rain sounds, soft music</td></tr>
+    <tr><td>👃 Smell</td><td>a flower, a clean soap</td></tr>
+    <tr><td>👅 Taste</td><td>a mint, a slice of orange</td></tr>
+    <tr><td>✋ Touch</td><td>a smooth stone, a soft ribbon, a squishy ball</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <span class="chnum">Mission 5</span>
+  <h2>Your Turn ✏️</h2>
+  <div class="ex big">
+    <h3>1. Fill your Calm Box</h3>
+    <p>Draw or write one thing for each sense.</p>
+    <div class="cols3">
+      <div class="box" style="min-height:80px">👀</div><div class="box" style="min-height:80px">👂</div><div class="box" style="min-height:80px">👃</div>
+      <div class="box" style="min-height:80px">👅</div><div class="box" style="min-height:80px">✋</div><div class="box" style="min-height:80px">My favorite:</div>
+    </div>
+  </div>
+  <div class="ex big">
+    <h3>2. Practice tracker</h3>
+    <p>Do 4 belly breaths. Color a star each time you try it this week.</p>
+    <p style="font-size:1.6rem;letter-spacing:6px">☆ ☆ ☆ ☆ ☆ ☆ ☆</p>
+  </div>
+  <div class="ex big">
+    <h3>3. What would you try?</h3>
+    <p>Your meter says 8 because your brother broke your toy. Circle the best first step:</p>
+    <p>A. Shout and throw something.<br>B. Stop, do 4 belly breaths, then talk.<br>C. Pretend nothing happened.</p>
+  </div>
+</section>
+
+<!-- M6 -->
+<section class="page">
+  <span class="chnum">Mission 6</span>
+  <h2>Thought Clouds ☁️</h2>
+  <div class="bubble big"><b>Pete says:</b> "Thoughts are like clouds. They float by. But a thought is <b>not</b> always a fact! When we are upset, our mind can play tricks: <i>'Everyone hates me!'</i> or <i>'I can't do anything right!'</i>"</div>
+  <div class="fig"><svg viewBox="0 0 520 280" width="480" role="img" aria-label="Thought triangle: thoughts, feelings and actions affect each other">
+<path d="M260 40 L60 230 L460 230Z" fill="#fff3c4" stroke="#2b2d42" stroke-width="5" stroke-linejoin="round"/>
+<g font-weight="bold" font-size="20" text-anchor="middle" fill="#2b2d42">
+<rect x="190" y="10" width="140" height="40" rx="20" fill="#9b5de5" stroke="#2b2d42" stroke-width="4"/><text x="260" y="38" fill="#fff">THOUGHT</text>
+<rect x="0" y="212" width="140" height="40" rx="20" fill="#ff6b9d" stroke="#2b2d42" stroke-width="4"/><text x="70" y="240">FEELING</text>
+<rect x="380" y="212" width="140" height="40" rx="20" fill="#6bd38a" stroke="#2b2d42" stroke-width="4"/><text x="450" y="240">ACTION</text></g>
+<text x="260" y="150" font-size="17" text-anchor="middle" font-weight="bold" fill="#2b2d42">They push each other!</text>
+</svg></div>
+  <div class="rule big">What we think changes how we feel, and how we feel changes what we do. A <b>kinder, more true</b> thought can change both.</div>
+  <h3>Thought Transformer</h3>
+  <table class="small">
+    <tr><th>What happened</th><th>Trick thought</th><th>True thought</th></tr>
+    <tr><td>A friend didn't sit with me at lunch</td><td>"She doesn't want to be my friend!"</td><td>"She is working on a project with Sam. We can play at recess."</td></tr>
+    <tr><td>I made a mistake on a math test</td><td>"I'm terrible at math!"</td><td>"Mistakes help my brain grow. I can practice the ones I missed."</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <span class="chnum">Mission 6</span>
+  <h2>Your Turn ✏️</h2>
+  <div class="ex big">
+    <h3>1. Transform the thought</h3>
+    <p>Your team lost the game. Trick thought: <i>"We are the worst. I never play well."</i></p>
+    <p>My true thought: <span class="blank" style="min-width:90%"></span></p>
+  </div>
+  <div class="ex big">
+    <h3>2. The I-Statement</h3>
+    <div class="rule"><b>"I feel</b> ______ <b>when</b> ______<b>. Next time, I need</b> ______<b>."</b></div>
+    <p>Example: <i>"I feel frustrated when my Lego tower is knocked over. Next time, I need you to ask before you join in."</i></p>
+    <p>Your turn: Someone takes your seat every day.</p>
+    <p>I feel <span class="blank" style="min-width:110px"></span> when <span class="blank" style="min-width:180px"></span>. Next time, I need <span class="blank" style="min-width:180px"></span>.</p>
+  </div>
+  <div class="ex big">
+    <h3>3. Trick or true?</h3>
+    <p>Write <b>T</b> for a trick thought, <b>R</b> for a realistic one.</p>
+    <ol style="line-height:1.9">
+      <li>"Nobody ever likes me." <span class="blank" style="min-width:40px"></span></li>
+      <li>"I felt left out today, but I can ask someone to play." <span class="blank" style="min-width:40px"></span></li>
+      <li>"I got one wrong, so I'm dumb." <span class="blank" style="min-width:40px"></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- CHECK-IN -->
+<section class="page">
+  <h2>📋 My Daily Check-In</h2>
+  <p class="small">Copy or print this page and fill it in each day.</p>
+  <table class="big">
+    <tr><th style="width:36%">1. My feeling today</th><td>Family: ☐ Happy ☐ Mad ☐ Sad ☐ Scared ☐ Surprise ☐ Yuck<br>My exact word: <span class="blank" style="min-width:160px"></span></td></tr>
+    <tr><th>2. My body radar</th><td>☐ Face ☐ Chest ☐ Tummy ☐ Hands ☐ Legs</td></tr>
+    <tr><th>3. My meter (0 to 10)</th><td>0 1 2 3 4 5 6 7 8 9 10 &nbsp; (circle one)</td></tr>
+    <tr><th>4. My calm tool</th><td>☐ Belly breaths ☐ One-word check-in ☐ 5-senses item ☐ True thought</td></tr>
+  </table>
+  <div class="fun big"><b>My Emotional Superpower Poster:</b> Draw yourself as a Feelings Explorer. Add your favorite calm tool!</div>
+  <div class="box" style="min-height:220px"></div>
+</section>
+
+<!-- CERTIFICATE -->
+<section class="page cert">
+  <h1>🏅 Master Feelings Explorer 🏅</h1>
+  <div class="fig"><svg viewBox="0 0 440 220" width="360"><use href="#pete" x="150" y="0" width="110" height="130"/><use href="#star" x="50" y="30" width="46" height="46"/><use href="#star" x="340" y="40" width="40" height="40"/><use href="#f-joy" x="40" y="120" width="70" height="70"/><use href="#f-calm" x="320" y="120" width="70" height="70"/></svg></div>
+  <p style="font-size:1.3rem">This certifies that</p>
+  <p><span class="blank" style="min-width:70%"></span></p>
+  <p style="font-size:1.3rem">can name feelings, read body clues, calm a storm and think true thoughts!</p>
+  <p>Date: ____________ &nbsp;&nbsp; Signed by Pete the Owl 🦉</p>
+  <p><b>Name it to tame it!</b></p>
+  <p class="small">Written by Mayank Sharma</p>
+</section>
+
+<!-- ANSWER KEY -->
+<section class="page">
+  <h2>🔑 Answer Key and Note for Grown-ups</h2>
+  <ul class="small">
+    <li><b>Mission 1:</b> (1) frustrated, nervous, delighted (more exact words tell more). (2) and (3) are personal.</li>
+    <li><b>Mission 2:</b> Colors and numbers are personal. There are no wrong numbers. A pencil taken might be 3 to 6, dropped ice cream 4 to 7, loud thunder 5 to 9. Different children will differ.</li>
+    <li><b>Mission 3:</b> (1) lonely, frustrated, startled, proud. (2) Sad family (e.g. disappointed, left out, lonely). (3) open-ended.</li>
+    <li><b>Mission 4:</b> Sleepover mix might be excited, nervous, a bit homesick. Leo may feel frustrated or blocked; Maya eager or excited. Sample sentence: "I feel frustrated, so can I finish this part, and then we build together?"</li>
+    <li><b>Mission 5:</b> Answer to 3 is B.</li>
+    <li><b>Mission 6:</b> (1) e.g. "We lost today, and we can practice for next time." (2) e.g. "I feel annoyed when someone takes my seat. Next time, I need you to ask first." (3) T, R, T.</li>
+  </ul>
+  <div class="bubble b small"><b>For parents and teachers:</b> This book follows the Feelings Explorers course: naming feelings ("name it to tame it"), body awareness, a wider feelings vocabulary, mixed feelings, slow breathing and simple thought-reframing with I-statements. Amy and Pete are playful pictures of the brain's alarm system and its thinking part; real brains are more complicated. Research suggests that finding words for feelings helps people feel calmer. Let your child pass on any activity. The book builds skills and is not a substitute for help from a doctor or counsellor. If a child's feelings seem too big to manage, please talk to a trusted professional.<br><b>Progress guide:</b> Early on, children say "good / bad / mad". Next they name families (angry, sad, scared). Later they use exact words (frustrated, discouraged, uneasy), notice body clues early, feel two feelings at once, and use I-statements.</div>
+</section>
+
+<!-- ABOUT THE AUTHOR -->
+<section class="page">
+  <h2>✍️ About the Author</h2>
+  <div class="fig"><svg viewBox="0 0 400 200" width="300" aria-hidden="true"><use href="#pete" x="150" y="0" width="90" height="106"/><use href="#star" x="60" y="40" width="46" height="46"/><use href="#star" x="300" y="60" width="38" height="38"/></svg></div>
+  <p><b>Mayank Sharma</b> works with computers to keep people safe online. He’s also a dad, a writer, and someone who loves to learn new things.</p>
+  <p>He wrote this book because children ask the best questions, and he thinks the best way to answer them is with a good story.</p>
+  <div class="fun" style="text-align:center">
+    <span style="font-size:1.3rem">Stay curious. Be kind. Believe in yourself. And never stop learning. 🌟</span>
+  </div>
+</section>
+
+</body></html>
