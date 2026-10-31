@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>The LLM Kitchen: Six Stages of Cooking an Answer</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff;font-family:"Comic Sans MS","Segoe Print","Chalkboard SE","Patrick Hand",sans-serif;color:#111}
+.poster{width:1290px;height:1640px;padding:30px 40px;position:relative;border:3px solid #111;margin:0 auto}
+h1{font-family:Impact,"Arial Narrow",sans-serif;font-size:46px;white-space:nowrap;margin:0 0 6px;text-align:center;letter-spacing:1px;text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:8px}
+.panel{border:3px solid #111;border-radius:30px;box-shadow:8px 8px 0 #111;padding:18px 22px;position:absolute}
+.num{display:inline-flex;width:40px;height:40px;border:3px solid #111;border-radius:50%;align-items:center;justify-content:center;background:#fff;font-weight:bold;font-size:22px;margin-right:8px}
+.p1{left:40px;top:110px;width:390px;height:610px;background:#fff3b8}
+.p2{left:470px;top:110px;width:780px;height:760px;background:#d9ecfb}
+.p3{left:40px;top:930px;width:680px;height:640px;background:#fcd3c9}
+.p4{left:780px;top:1180px;width:470px;height:370px;background:#cdeedd}
+h2{font-family:Impact,"Arial Narrow",sans-serif;margin:0;font-size:34px;display:inline}
+.arrow{position:absolute;font-size:56px;color:#3f72c4;font-weight:bold;line-height:1}
+.big{font-size:70px;text-align:center;margin:14px 0 0}
+.cap{text-align:center;font-weight:bold;font-size:20px}
+.axes{position:relative;width:290px;height:250px;margin:14px 0 0 48px;border-left:4px solid #111;border-bottom:4px solid #111}
+.axes:before,.axes:after{content:"";position:absolute;left:10%;top:50%;width:80%;height:4px;background:#3f72c4}
+.axes:before{transform:rotate(41deg)}.axes:after{transform:rotate(-41deg)}
+.ay{position:absolute;left:-34px;top:60px;font-size:15px;font-weight:bold;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap}
+.ax{position:absolute;bottom:-28px;white-space:nowrap;left:0;width:100%;text-align:center;font-size:15px;font-weight:bold}
+.card{position:absolute;width:240px;text-align:center;font-size:17px;line-height:1.3}
+.card .ic{font-size:68px;line-height:1}
+.card b{font-size:20px;display:block;margin-top:2px}
+.card i{display:block;font-size:15px;margin-bottom:3px}
+.guide{position:absolute;width:190px;text-align:center}
+.bubble{border:3px solid #111;border-radius:22px;background:#fff;padding:8px 10px;font-size:16px;font-weight:bold;margin-bottom:6px}
+.guide .ic{font-size:96px;line-height:1}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:19px}
+th{font-size:16px;padding:6px 4px;border-bottom:3px solid #111;text-align:center}
+td{padding:18px 6px;border-bottom:2px solid #111;text-align:center}
+td:first-child{text-align:left;font-weight:bold}
+tr.y td{background:#fff27a}tr.g td{background:#bfe3b0}
+.rule{background:#fff;border:3px solid #111;border-radius:10px;padding:14px 16px;margin-top:12px}
+.rule .t{font-size:34px;font-weight:bold;line-height:1.15}
+.rule .s{font-size:19px;font-weight:bold;margin-top:10px}
+.credit{position:absolute;right:50px;bottom:12px;border:2px solid #111;border-radius:8px;padding:4px 14px;font-size:16px;font-weight:bold;background:#fff}
+</style></head><body>
+<div class="poster">
+<h1>The LLM Kitchen: Six Stages of Cooking an Answer</h1>
+
+<div class="panel p1">
+  <span class="num">1</span><h2>START HERE</h2>
+  <div class="big">🏪</div>
+  <div class="cap">THE DATA PANTRY<br><span style="font-weight:normal;font-size:16px">Trillions of words of text</span></div>
+  <div class="axes"><div class="ay">Cost ↑</div><div class="ax">When it runs →</div></div>
+  <div class="cap" style="margin-top:46px;font-size:16px">Same pantry feeds every dish:<br>one set of weights, many stages.</div>
+</div>
+
+<div class="arrow" style="left:424px;top:300px">➜</div>
+
+<div class="panel p2">
+  <span class="num" style="background:#fff">2</span><h2>THE SIX STATIONS</h2>
+  <div class="card" style="left:15px;top:70px"><div class="ic">🔪</div><b>1. TOKENIZER</b><i>(Chopping board)</i>Chops text into small tokens (word pieces) the model can digest.</div>
+  <div class="card" style="left:270px;top:70px"><div class="ic">🛒</div><b>2. PRE-TRAINING</b><i>(Stocking the pantry)</i>Reads the internet to learn: predict the next token. Months, thousands of GPUs.</div>
+  <div class="card" style="left:525px;top:70px"><div class="ic">👨‍🍳</div><b>3. ATTENTION</b><i>(Chef tasting every dish)</i>Transformer decides which earlier words matter most for the next one.</div>
+  <div class="guide" style="left:300px;top:320px"><div class="bubble">Pick your station by cost, control & freshness!</div><div class="ic">🧑‍🍳</div></div>
+  <div class="card" style="left:15px;top:470px"><div class="ic">📝</div><b>4. FINE-TUNING</b><i>(Family recipe)</i>Retrains on your examples so it cooks in your style or domain.</div>
+  <div class="card" style="left:270px;top:520px"><div class="ic">🧐</div><b>5. RLHF / ALIGNMENT</b><i>(Food critic)</i>Human feedback teaches it to be helpful, honest and safe.</div>
+  <div class="card" style="left:525px;top:470px"><div class="ic">🍽️</div><b>6. INFERENCE</b><i>(Plating, one token at a time)</i>Picks the next token; temperature = how adventurous the chef is.</div>
+</div>
+
+<div class="arrow" style="left:340px;top:812px;transform:rotate(90deg)">➜</div>
+
+<div class="panel p3">
+  <span class="num">3</span><h2>COMPARISON MATRIX: WHO, WHEN & HOW MUCH</h2>
+  <table>
+    <tr><th>STATION</th><th>RUNS</th><th>COST</th><th>CHANGES WEIGHTS?</th></tr>
+    <tr><td>1. Tokenizer</td><td>Every request</td><td>Tiny ($)</td><td>No</td></tr>
+    <tr class="y"><td>2. Pre-training</td><td>Once</td><td>Huge ($$$$$)</td><td>Yes ✓ (all)</td></tr>
+    <tr><td>3. Attention</td><td>Every token</td><td>Compute ($$)</td><td>No</td></tr>
+    <tr class="g"><td>4. Fine-tuning</td><td>Occasionally</td><td>Moderate ($$)</td><td>Yes ✓ (some)</td></tr>
+    <tr><td>5. RLHF</td><td>Before release</td><td>High ($$$)</td><td>Yes ✓ (nudged)</td></tr>
+    <tr><td>6. Inference</td><td>Every request</td><td>Per token ($)</td><td>No</td></tr>
+  </table>
+  <div class="cap" style="margin-top:22px;font-size:19px;font-weight:normal">Training changes the weights. Using the model never does.</div>
+</div>
+
+<div class="arrow" style="left:722px;top:1330px">➜</div>
+
+<div class="panel p4">
+  <span class="num">4</span><h2>KEY RULE</h2>
+  <div class="rule">
+    <div class="t">An LLM doesn't "know" answers. It predicts the next token.</div>
+    <div class="s">Great prompts, context and checks make it look like knowing.</div>
+  </div>
+</div>
+
+<div class="credit">@yourhandle | yoursite.dev</div>
+</div>
+</body></html>
