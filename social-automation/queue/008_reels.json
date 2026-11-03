@@ -1,0 +1,9 @@
+{
+  "topic_id": "8",
+  "topic": "Habituation / MFA fatigue",
+  "platform": "reels",
+  "status": "pending",
+  "created": "2026-11-03T18:10:53.017721+00:00",
+  "fact_check_needed": true,
+  "content": "HOOK_TEXT: One tired tap can beat MFA\nSAY: Your phone buzzes. Approve login? You didn't try to log in.\nON_SCREEN: \"Approve sign-in?\"\nBROLL: Mock approval prompt on a phone\nSAY: This is MFA fatigue. Attackers with your password spam prompts until someone taps yes.\nON_SCREEN: MFA fatigue\nSAY: It works because of habituation. Tap approve enough times and your brain stops reading.\nSAY: Sometimes they even call and say, I'm from IT, just approve it.\nON_SCREEN: \"IT here, just approve it\" = red flag\nSAY: Rule: never approve a prompt you didn't start. Deny it, and change your password.\nON_SCREEN: Deny, change password, report\nSAY: Better still, use passkeys or security keys, which resist this trick.\nSAY: Report surprise prompts. They mean your password is already out there. Save this for your next MFA rollout.\nTITLE: How attackers beat MFA with one tap\nCAPTION: MFA is great, but a tired tap can undo it. Deny prompts you didn't trigger, change your password, and tell your security team. Passkeys and security keys resist this trick. Ever got a surprise prompt? #MFA #Passkeys #InfoSec"
+}

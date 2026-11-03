@@ -1,0 +1,9 @@
+{
+  "topic_id": "1",
+  "topic": "Authority bias",
+  "platform": "reels",
+  "status": "pending",
+  "created": "2026-11-03T18:10:53.017179+00:00",
+  "fact_check_needed": true,
+  "content": "HOOK_TEXT: Your CEO won't text you gift cards\nSAY: Your CEO would never email you at 11pm asking for gift cards.\nON_SCREEN: \"Urgent - are you at your desk?\"\nBROLL: Mock email from a fake brand with a spoofed executive name\nSAY: But scammers know something about your brain. It's called authority bias. We obey titles without checking.\nON_SCREEN: Authority bias = trusting the title, not the proof\nSAY: So they copy a boss's name, tone, and signature. Then add secrecy and a deadline.\nON_SCREEN: Red flags: secrecy + urgency + unusual payment\nBROLL: Highlight the red flags in the mock email\nSAY: Here's the fix. Don't reply to that email. Call the person on a number you already have.\nON_SCREEN: Verify on a second channel you trust\nSAY: A real boss will thank you for double-checking. A scammer will push back.\nSAY: Save this, and send it to someone in finance.\nON_SCREEN: Save + share\nTITLE: Why scammers pretend to be your boss\nCAPTION: Authority is a mental shortcut attackers borrow. A title in the From line is not proof. Verify payment or login requests through a second channel you trust. Who on your team needs this? #SocialEngineering #BEC #CyberAwareness"
+}
