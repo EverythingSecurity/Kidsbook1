@@ -1,0 +1,9 @@
+{
+  "topic_id": "8",
+  "topic": "Habituation / MFA fatigue",
+  "platform": "instagram",
+  "status": "pending",
+  "created": "2026-11-03T17:47:00.799429+00:00",
+  "fact_check_needed": true,
+  "content": "SLIDES:\n1. Click Approve 40 times and your brain stops reading.\n2. Habituation: repeated prompts become invisible.\n3. MFA fatigue: attackers spam login approvals until someone taps Yes.\n4. Often followed by a call: 'IT here, just approve it.'\n5. Never approve a prompt you did not start.\n6. Report unexpected prompts. They mean your password is exposed.\n7. Better defense: number matching and passkeys or security keys.\n8. Save this for your next MFA rollout.\n\nCAPTION:\nMFA is great, but a tired tap can undo it. If you get prompts you didn't trigger, deny them, change your password, and tell your security team. Passkeys and security keys resist this trick. Have you ever got a surprise prompt? #MFA #Passkeys #InfoSec"
+}
